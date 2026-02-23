@@ -1,0 +1,15 @@
+{
+    "name": "@generador/shared",
+    "version": "1.0.0",
+    "description": "Tipos e interfaces compartidas del Generador de Portales",
+    "main": "index.ts",
+    "types": "index.ts",
+    "scripts": {
+        "lint": "eslint .",
+        "typecheck": "tsc --noEmit"
+    },
+    "dependencies": {},
+    "devDependencies": {
+        "typescript": "^5.0.0"
+    }
+}
