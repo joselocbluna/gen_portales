@@ -1,0 +1,26 @@
+erDiagram
+    User ||--o{ CompanyUser : "pertenece a"
+    User ||--o{ ProjectUser : "asignado a"
+    User ||--o{ MediaFile : "sube"
+    User ||--o{ AuditLog : "genera"
+
+    Company ||--o{ CompanyUser : "tiene"
+    Company ||--o{ Project : "contiene"
+    Company ||--o{ Template : "posee"
+    Company ||--o{ MediaFile : "almacena"
+
+    Role ||--o{ CompanyUser : "asigna"
+
+    CompanyUser }o--|| User : ""
+    CompanyUser }o--|| Company : ""
+    CompanyUser }o--|| Role : ""
+
+    Project ||--o{ Page : "contiene"
+    Project ||--o{ ProjectUser : "asigna"
+    Project ||--o{ Build : "genera"
+    Project ||--o{ MediaFile : "usa"
+    Project }o--o| Template : "basado en"
+
+    Page ||--o{ PageVersion : "versiona"
+
+    Template }o--o| Company : "pertenece a"

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframes — Generador de Portales</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #333; }
+
+  .page-nav { position: fixed; top: 0; left: 0; right: 0; background: #1a1a2e; color: white; padding: 12px 24px; z-index: 100; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  .page-nav a { color: #7dd3fc; text-decoration: none; font-size: 13px; padding: 4px 10px; border-radius: 4px; background: rgba(255,255,255,0.1); }
+  .page-nav a:hover { background: rgba(255,255,255,0.2); }
+  .page-nav .title { font-weight: 700; font-size: 14px; margin-right: 12px; color: #e0e0e0; }
+
+  .screen { max-width: 1100px; margin: 80px auto 60px; background: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); overflow: hidden; }
+  .screen-title { background: #16213e; color: white; padding: 16px 24px; font-size: 16px; font-weight: 600; }
+  .screen-title span { font-weight: 400; color: #93c5fd; font-size: 13px; margin-left: 8px; }
+  .screen-body { padding: 0; min-height: 500px; display: flex; }
+
+  /* Sidebar */
+  .sidebar { width: 220px; background: #1e293b; color: white; padding: 20px 0; flex-shrink: 0; }
+  .sidebar .logo { padding: 0 16px 20px; font-weight: 700; font-size: 15px; color: #60a5fa; border-bottom: 1px solid #334155; margin-bottom: 12px; }
+  .sidebar .menu-item { padding: 10px 16px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #cbd5e1; }
+  .sidebar .menu-item:hover { background: #334155; }
+  .sidebar .menu-item.active { background: #3b82f6; color: white; }
+  .sidebar .menu-section { padding: 16px 16px 6px; font-size: 11px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
+  .sidebar .menu-icon { width: 18px; text-align: center; }
+
+  /* Main content */
+  .main { flex: 1; padding: 24px; background: #f8fafc; }
+  .main h2 { font-size: 20px; margin-bottom: 4px; }
+  .main .subtitle { color: #64748b; font-size: 13px; margin-bottom: 20px; }
+
+  /* Cards grid */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-top: 16px; }
+  .card { background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 16px; }
+  .card .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .card .card-title { font-weight: 600; font-size: 14px; }
+  .card .card-badge { font-size: 11px; background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 10px; }
+  .card .card-stat { font-size: 12px; color: #64748b; margin-top: 4px; }
+  .card .card-actions { margin-top: 12px; display: flex; gap: 8px; }
+
+  /* Buttons */
+  .btn { padding: 6px 14px; border-radius: 6px; font-size: 12px; border: none; cursor: pointer; font-weight: 500; }
+  .btn-primary { background: #3b82f6; color: white; }
+  .btn-secondary { background: #e2e8f0; color: #475569; }
+  .btn-success { background: #10b981; color: white; }
+  .btn-sm { padding: 4px 10px; font-size: 11px; }
+
+  /* Top bar */
+  .topbar { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: white; border-bottom: 1px solid #e2e8f0; }
+  .topbar .breadcrumb { font-size: 13px; color: #64748b; }
+  .topbar .breadcrumb strong { color: #1e293b; }
+  .topbar .user-info { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+  .topbar .avatar { width: 32px; height: 32px; border-radius: 50%; background: #3b82f6; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; }
+
+  /* Table */
+  .table { width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 13px; }
+  .table th { text-align: left; padding: 10px 12px; background: #f1f5f9; color: #475569; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+  .table td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; }
+
+  /* Search bar */
+  .search-bar { display: flex; gap: 8px; margin-bottom: 16px; }
+  .search-bar input { flex: 1; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; }
+
+  /* Stats row */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .stat-card { background: white; border-radius: 8px; border: 1px solid #e2e8f0; padding: 14px; }
+  .stat-card .stat-value { font-size: 24px; font-weight: 700; color: #1e293b; }
+  .stat-card .stat-label { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+  /* Editor specific */
+  .editor-layout { display: flex; height: 600px; }
+  .editor-toolbar { width: 48px; background: #1e293b; display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 4px; }
+  .editor-toolbar .tool { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #94a3b8; font-size: 14px; cursor: pointer; }
+  .editor-toolbar .tool:hover, .editor-toolbar .tool.active { background: #3b82f6; color: white; }
+  .editor-toolbar .separator { width: 28px; height: 1px; background: #334155; margin: 4px 0; }
+
+  .editor-components { width: 200px; background: white; border-right: 1px solid #e2e8f0; padding: 12px; overflow-y: auto; }
+  .editor-components h4 { font-size: 11px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; letter-spacing: 1px; }
+  .component-item { padding: 8px; border: 1px dashed #e2e8f0; border-radius: 6px; margin-bottom: 6px; font-size: 12px; color: #475569; cursor: grab; text-align: center; background: #f8fafc; }
+  .component-item:hover { border-color: #3b82f6; background: #eff6ff; }
+
+  .editor-canvas { flex: 1; background: #f1f5f9; position: relative; overflow: auto; }
+  .canvas-content { margin: 24px auto; width: 80%; min-height: 500px; background: white; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 24px; }
+  .canvas-section { border: 1px dashed #93c5fd; border-radius: 4px; padding: 16px; margin-bottom: 16px; min-height: 80px; position: relative; }
+  .canvas-section .section-label { position: absolute; top: -10px; left: 8px; background: #3b82f6; color: white; font-size: 10px; padding: 2px 8px; border-radius: 3px; }
+  .canvas-placeholder { border: 2px dashed #d1d5db; border-radius: 4px; padding: 12px; text-align: center; color: #9ca3af; font-size: 12px; min-height: 40px; display: flex; align-items: center; justify-content: center; margin: 8px 0; }
+
+  .editor-properties { width: 260px; background: white; border-left: 1px solid #e2e8f0; padding: 12px; overflow-y: auto; }
+  .editor-properties h4 { font-size: 11px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; letter-spacing: 1px; }
+  .prop-group { margin-bottom: 16px; }
+  .prop-label { font-size: 11px; color: #64748b; margin-bottom: 4px; }
+  .prop-input { width: 100%; padding: 6px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px; margin-bottom: 8px; }
+  .prop-select { width: 100%; padding: 6px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 12px; margin-bottom: 8px; background: white; }
+
+  .ai-panel { width: 300px; background: #0f172a; color: white; border-left: 1px solid #334155; display: flex; flex-direction: column; }
+  .ai-panel .ai-header { padding: 12px; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+  .ai-panel .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; }
+  .ai-panel .ai-messages { flex: 1; padding: 12px; overflow-y: auto; }
+  .ai-panel .ai-msg { margin-bottom: 12px; font-size: 12px; line-height: 1.5; }
+  .ai-panel .ai-msg.user { background: #1e3a5f; padding: 8px 10px; border-radius: 8px 8px 0 8px; }
+  .ai-panel .ai-msg.assistant { background: #1e293b; padding: 8px 10px; border-radius: 8px 8px 8px 0; border: 1px solid #334155; }
+  .ai-panel .ai-input-area { padding: 12px; border-top: 1px solid #334155; display: flex; gap: 6px; }
+  .ai-panel .ai-input { flex: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid #475569; background: #1e293b; color: white; font-size: 12px; }
+  .ai-panel .ai-send { padding: 8px 12px; background: #3b82f6; border: none; border-radius: 6px; color: white; cursor: pointer; font-size: 12px; }
+
+  /* Login */
+  .login-container { display: flex; height: 580px; }
+  .login-left { flex: 1; background: linear-gradient(135deg, #1e3a5f, #3b82f6); display: flex; flex-direction: column; justify-content: center; padding: 48px; color: white; }
+  .login-left h1 { font-size: 28px; margin-bottom: 12px; }
+  .login-left p { font-size: 14px; opacity: 0.8; line-height: 1.6; }
+  .login-right { width: 420px; display: flex; flex-direction: column; justify-content: center; padding: 48px; background: white; }
+  .login-right h2 { font-size: 22px; margin-bottom: 6px; }
+  .login-right .login-sub { color: #64748b; font-size: 13px; margin-bottom: 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { font-size: 12px; font-weight: 600; color: #475569; display: block; margin-bottom: 4px; }
+  .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 13px; }
+  .login-btn { width: 100%; padding: 10px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+
+  /* Templates grid */
+  .template-card { background: white; border-radius: 8px; border: 1px solid #e2e8f0; overflow: hidden; }
+  .template-preview { height: 140px; background: linear-gradient(135deg, #e0f2fe, #dbeafe); display: flex; align-items: center; justify-content: center; color: #3b82f6; font-size: 32px; }
+  .template-info { padding: 12px; }
+  .template-info .template-name { font-weight: 600; font-size: 13px; }
+  .template-info .template-desc { font-size: 11px; color: #64748b; margin-top: 4px; }
+  .template-info .template-tags { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .template-info .tag { font-size: 10px; background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 3px; }
+
+  /* Page tree */
+  .page-tree { margin-top: 12px; }
+  .page-tree-item { padding: 6px 8px; font-size: 12px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 6px; color: #64748b; }
+  .page-tree-item:hover { background: #f1f5f9; }
+  .page-tree-item.active { background: #eff6ff; color: #3b82f6; }
+  .page-tree-item .indent { margin-left: 16px; }
+
+  /* Responsive annotations */
+  .annotation { position: absolute; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 4px; padding: 4px 8px; font-size: 10px; color: #92400e; z-index: 10; }
+
+  .screen + .screen { margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<nav class="page-nav">
+  <span class="title">Wireframes — Generador de Portales</span>
+  <a href="#login">Login</a>
+  <a href="#dashboard-admin">Dashboard Admin</a>
+  <a href="#empresa">Empresa</a>
+  <a href="#proyectos">Proyectos</a>
+  <a href="#editor">Editor Canvas</a>
+  <a href="#templates">Templates</a>
+  <a href="#admin-usuarios">Admin Usuarios</a>
+</nav>
+
+<!-- ========================================== -->
+<!-- PANTALLA 1: LOGIN -->
+<!-- ========================================== -->
+<div class="screen" id="login">
+  <div class="screen-title">01 — Login / Registro <span>Ruta: /login</span></div>
+  <div class="login-container">
+    <div class="login-left">
+      <h1>Generador de Portales</h1>
+      <p>Crea portales web profesionales con nuestro editor visual drag & drop. Integra inteligencia artificial para acelerar tu flujo de trabajo.</p>
+      <br>
+      <p style="font-size:12px; opacity:0.6;">v1.0 — Plataforma de generación de sitios web</p>
+    </div>
+    <div class="login-right">
+      <h2>Iniciar Sesión</h2>
+      <p class="login-sub">Ingresa tus credenciales para acceder</p>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" placeholder="usuario@empresa.com">
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••">
+      </div>
+      <button class="login-btn">Iniciar Sesión</button>
+      <p style="text-align:center; margin-top:16px; font-size:12px; color:#64748b;">
+        ¿No tienes cuenta? <a href="#" style="color:#3b82f6;">Contacta al administrador</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 2: DASHBOARD ADMIN (*systemroot) -->
+<!-- ========================================== -->
+<div class="screen" id="dashboard-admin">
+  <div class="screen-title">02 — Dashboard Admin (*systemroot) <span>Ruta: /empresas</span></div>
+  <div class="screen-body">
+    <div class="sidebar">
+      <div class="logo">⬡ Gen Portales</div>
+      <div class="menu-section">Principal</div>
+      <div class="menu-item active"><span class="menu-icon">🏢</span> Empresas</div>
+      <div class="menu-item"><span class="menu-icon">📋</span> Templates Globales</div>
+      <div class="menu-section">Administración</div>
+      <div class="menu-item"><span class="menu-icon">👥</span> Usuarios</div>
+      <div class="menu-item"><span class="menu-icon">🔑</span> Roles y Permisos</div>
+      <div class="menu-section">Sistema</div>
+      <div class="menu-item"><span class="menu-icon">⚙️</span> Configuración</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <div class="topbar">
+        <div class="breadcrumb"><strong>Empresas</strong> — Vista global</div>
+        <div class="user-info">
+          <span>Admin</span>
+          <div class="avatar">A</div>
+        </div>
+      </div>
+      <div class="main">
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Empresas activas</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">47</div>
+            <div class="stat-label">Proyectos totales</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">23</div>
+            <div class="stat-label">Templates globales</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">89</div>
+            <div class="stat-label">Usuarios registrados</div>
+          </div>
+        </div>
+
+        <div class="search-bar">
+          <input placeholder="Buscar empresa...">
+          <button class="btn btn-primary">+ Nueva Empresa</button>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Empresa Alpha</span>
+              <span class="card-badge">Activa</span>
+            </div>
+            <div class="card-stat">8 proyectos · 3 templates · 12 usuarios</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary">Ver</button>
+              <button class="btn btn-sm btn-primary">Proyectos</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Empresa Beta</span>
+              <span class="card-badge">Activa</span>
+            </div>
+            <div class="card-stat">5 proyectos · 1 template · 8 usuarios</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary">Ver</button>
+              <button class="btn btn-sm btn-primary">Proyectos</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Empresa Gamma</span>
+              <span class="card-badge">Activa</span>
+            </div>
+            <div class="card-stat">3 proyectos · 2 templates · 5 usuarios</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary">Ver</button>
+              <button class="btn btn-sm btn-primary">Proyectos</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Empresa Delta</span>
+              <span class="card-badge" style="background:#fef3c7;color:#92400e;">Inactiva</span>
+            </div>
+            <div class="card-stat">2 proyectos · 0 templates · 3 usuarios</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-secondary">Ver</button>
+              <button class="btn btn-sm btn-primary">Proyectos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 3: VISTA EMPRESA (usuario empresa) -->
+<!-- ========================================== -->
+<div class="screen" id="empresa">
+  <div class="screen-title">03 — Dashboard Empresa <span>Ruta: /empresas/:empresaId · Rol: Desarrollador/Editor</span></div>
+  <div class="screen-body">
+    <div class="sidebar">
+      <div class="logo">⬡ Empresa Alpha</div>
+      <div class="menu-section">Empresa</div>
+      <div class="menu-item active"><span class="menu-icon">🏠</span> Inicio</div>
+      <div class="menu-item"><span class="menu-icon">📁</span> Proyectos</div>
+      <div class="menu-item"><span class="menu-icon">📋</span> Templates</div>
+      <div class="menu-section">Cuenta</div>
+      <div class="menu-item"><span class="menu-icon">👤</span> Mi Perfil</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <div class="topbar">
+        <div class="breadcrumb">Empresa Alpha / <strong>Dashboard</strong></div>
+        <div class="user-info">
+          <span style="font-size:11px; background:#dbeafe; color:#1d4ed8; padding:2px 8px; border-radius:10px;">Desarrollador</span>
+          <span>Jose</span>
+          <div class="avatar">J</div>
+        </div>
+      </div>
+      <div class="main">
+        <h2>Bienvenido, Jose</h2>
+        <p class="subtitle">Empresa Alpha — 8 proyectos activos</p>
+
+        <div class="stats" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="stat-card">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Mis proyectos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Templates empresa</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">23</div>
+            <div class="stat-label">Templates globales</div>
+          </div>
+        </div>
+
+        <h3 style="font-size:15px; margin-bottom:12px;">Proyectos recientes</h3>
+        <div class="cards">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Portal Corporativo</span>
+              <span class="card-badge" style="background:#dcfce7;color:#166534;">Publicado</span>
+            </div>
+            <div class="card-stat">12 páginas · Actualizado hace 2h</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary">Editar</button>
+              <button class="btn btn-sm btn-success">Preview</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Landing Producto X</span>
+              <span class="card-badge">Borrador</span>
+            </div>
+            <div class="card-stat">3 páginas · Actualizado hace 1d</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary">Editar</button>
+              <button class="btn btn-sm btn-secondary">Preview</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Blog Técnico</span>
+              <span class="card-badge">Borrador</span>
+            </div>
+            <div class="card-stat">7 páginas · Actualizado hace 3d</div>
+            <div class="card-actions">
+              <button class="btn btn-sm btn-primary">Editar</button>
+              <button class="btn btn-sm btn-secondary">Preview</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 4: LISTA DE PROYECTOS -->
+<!-- ========================================== -->
+<div class="screen" id="proyectos">
+  <div class="screen-title">04 — Proyectos de Empresa <span>Ruta: /empresas/:empresaId/proyectos</span></div>
+  <div class="screen-body">
+    <div class="sidebar">
+      <div class="logo">⬡ Empresa Alpha</div>
+      <div class="menu-section">Empresa</div>
+      <div class="menu-item"><span class="menu-icon">🏠</span> Inicio</div>
+      <div class="menu-item active"><span class="menu-icon">📁</span> Proyectos</div>
+      <div class="menu-item"><span class="menu-icon">📋</span> Templates</div>
+      <div class="menu-section">Cuenta</div>
+      <div class="menu-item"><span class="menu-icon">👤</span> Mi Perfil</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <div class="topbar">
+        <div class="breadcrumb">Empresa Alpha / <strong>Proyectos</strong></div>
+        <div class="user-info">
+          <span>Jose</span>
+          <div class="avatar">J</div>
+        </div>
+      </div>
+      <div class="main">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <div>
+            <h2>Proyectos</h2>
+            <p class="subtitle">8 proyectos en Empresa Alpha</p>
+          </div>
+          <button class="btn btn-primary">+ Nuevo Proyecto</button>
+        </div>
+
+        <div class="search-bar">
+          <input placeholder="Buscar proyecto...">
+          <select style="padding:8px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px;">
+            <option>Todos los estados</option>
+            <option>Publicado</option>
+            <option>Borrador</option>
+          </select>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Proyecto</th>
+              <th>Estado</th>
+              <th>Páginas</th>
+              <th>Template base</th>
+              <th>Última edición</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Portal Corporativo</strong></td>
+              <td><span class="card-badge" style="background:#dcfce7;color:#166534;">Publicado</span></td>
+              <td>12</td>
+              <td>Corporativo Pro</td>
+              <td>Hace 2 horas</td>
+              <td>
+                <button class="btn btn-sm btn-primary">Editar</button>
+                <button class="btn btn-sm btn-secondary">Config</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Landing Producto X</strong></td>
+              <td><span class="card-badge">Borrador</span></td>
+              <td>3</td>
+              <td>Landing Page</td>
+              <td>Hace 1 día</td>
+              <td>
+                <button class="btn btn-sm btn-primary">Editar</button>
+                <button class="btn btn-sm btn-secondary">Config</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Blog Técnico</strong></td>
+              <td><span class="card-badge">Borrador</span></td>
+              <td>7</td>
+              <td>Blog Starter</td>
+              <td>Hace 3 días</td>
+              <td>
+                <button class="btn btn-sm btn-primary">Editar</button>
+                <button class="btn btn-sm btn-secondary">Config</button>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>E-commerce Demo</strong></td>
+              <td><span class="card-badge" style="background:#dcfce7;color:#166534;">Publicado</span></td>
+              <td>15</td>
+              <td>E-commerce Base</td>
+              <td>Hace 1 semana</td>
+              <td>
+                <button class="btn btn-sm btn-primary">Editar</button>
+                <button class="btn btn-sm btn-secondary">Config</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 5: EDITOR / CANVAS + PANEL IA -->
+<!-- ========================================== -->
+<div class="screen" id="editor">
+  <div class="screen-title">05 — Editor Canvas + Panel IA <span>Ruta: /empresas/:empresaId/proyectos/:proyectoId/editor</span></div>
+  <div class="editor-layout">
+    <!-- Toolbar izquierdo -->
+    <div class="editor-toolbar">
+      <div class="tool active" title="Seleccionar">↖</div>
+      <div class="tool" title="Mover">✋</div>
+      <div class="tool" title="Texto">T</div>
+      <div class="tool" title="Imagen">🖼</div>
+      <div class="separator"></div>
+      <div class="tool" title="Desktop">🖥</div>
+      <div class="tool" title="Tablet">📱</div>
+      <div class="tool" title="Mobile">📲</div>
+      <div class="separator"></div>
+      <div class="tool" title="Código">&lt;/&gt;</div>
+      <div class="tool" title="Deshacer">↩</div>
+      <div class="tool" title="Rehacer">↪</div>
+      <div class="separator"></div>
+      <div class="tool" title="IA" style="background:#7c3aed; color:white;">✨</div>
+    </div>
+
+    <!-- Panel componentes -->
+    <div class="editor-components">
+      <h4>Páginas</h4>
+      <div class="page-tree">
+        <div class="page-tree-item active">📄 Home</div>
+        <div class="page-tree-item">📄 Nosotros</div>
+        <div class="page-tree-item">📄 Servicios</div>
+        <div class="page-tree-item">📄 Contacto</div>
+        <div style="margin-top:8px;">
+          <button class="btn btn-sm btn-secondary" style="width:100%;">+ Página</button>
+        </div>
+      </div>
+
+      <h4 style="margin-top:16px;">Componentes</h4>
+      <div class="component-item">📐 Header</div>
+      <div class="component-item">🦸 Hero Section</div>
+      <div class="component-item">📝 Texto</div>
+      <div class="component-item">🖼️ Imagen</div>
+      <div class="component-item">🔘 Botón</div>
+      <div class="component-item">📊 Cards Grid</div>
+      <div class="component-item">📋 Formulario</div>
+      <div class="component-item">🔗 Navegación</div>
+      <div class="component-item">📎 Footer</div>
+
+      <h4 style="margin-top:16px;">Secciones</h4>
+      <div class="component-item">1 Columna</div>
+      <div class="component-item">2 Columnas</div>
+      <div class="component-item">3 Columnas</div>
+      <div class="component-item">Sidebar + Main</div>
+    </div>
+
+    <!-- Canvas principal -->
+    <div class="editor-canvas">
+      <div style="padding:8px 12px; background:white; border-bottom:1px solid #e2e8f0; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="color:#64748b;">Home — Portal Corporativo</span>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-sm btn-secondary">Preview</button>
+          <button class="btn btn-sm btn-success">Guardar</button>
+          <button class="btn btn-sm btn-primary">Publicar</button>
+        </div>
+      </div>
+      <div class="canvas-content">
+        <div class="canvas-section">
+          <span class="section-label">Header</span>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:8px;">
+            <span style="font-weight:700; font-size:14px; color:#3b82f6;">⬡ Mi Portal</span>
+            <div style="display:flex; gap:12px; font-size:12px; color:#64748b;">
+              <span>Inicio</span><span>Nosotros</span><span>Servicios</span><span>Contacto</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="canvas-section" style="border-color:#a78bfa;">
+          <span class="section-label" style="background:#7c3aed;">Hero Section</span>
+          <div style="text-align:center; padding:24px;">
+            <h2 style="font-size:20px; margin-bottom:8px;">Bienvenido a Nuestro Portal</h2>
+            <p style="color:#64748b; font-size:12px; margin-bottom:12px;">Soluciones innovadoras para tu negocio</p>
+            <button class="btn btn-primary">Conocer más</button>
+          </div>
+        </div>
+
+        <div class="canvas-section">
+          <span class="section-label">Contenido (3 cols)</span>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:8px;">
+            <div class="canvas-placeholder">Card 1</div>
+            <div class="canvas-placeholder">Card 2</div>
+            <div class="canvas-placeholder">Card 3</div>
+          </div>
+        </div>
+
+        <div class="canvas-placeholder" style="margin:16px 0;">
+          Arrastra un componente aquí o usa el asistente IA ✨
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel de propiedades -->
+    <div class="editor-properties">
+      <h4>Propiedades</h4>
+      <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">Hero Section seleccionada</p>
+
+      <div class="prop-group">
+        <div class="prop-label">Título</div>
+        <input class="prop-input" value="Bienvenido a Nuestro Portal">
+        <div class="prop-label">Subtítulo</div>
+        <input class="prop-input" value="Soluciones innovadoras para tu negocio">
+        <div class="prop-label">Texto botón</div>
+        <input class="prop-input" value="Conocer más">
+        <div class="prop-label">URL botón</div>
+        <input class="prop-input" value="/servicios">
+      </div>
+
+      <h4>Estilos</h4>
+      <div class="prop-group">
+        <div class="prop-label">Fondo</div>
+        <div style="display:flex; gap:4px;">
+          <input class="prop-input" value="#ffffff" style="width:60%;">
+          <div style="width:32px; height:30px; background:white; border:1px solid #e2e8f0; border-radius:4px;"></div>
+        </div>
+        <div class="prop-label">Alineación</div>
+        <select class="prop-select">
+          <option>Centro</option>
+          <option>Izquierda</option>
+          <option>Derecha</option>
+        </select>
+        <div class="prop-label">Padding</div>
+        <input class="prop-input" value="24px">
+      </div>
+
+      <h4>Responsive</h4>
+      <div class="prop-group">
+        <div class="prop-label">Visible en</div>
+        <div style="display:flex; gap:4px;">
+          <button class="btn btn-sm btn-primary">Desktop</button>
+          <button class="btn btn-sm btn-primary">Tablet</button>
+          <button class="btn btn-sm btn-primary">Móvil</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel IA -->
+    <div class="ai-panel">
+      <div class="ai-header">
+        <div class="ai-dot"></div>
+        Asistente IA
+        <span style="font-size:10px; color:#64748b; margin-left:auto;">Contexto: Home</span>
+      </div>
+      <div class="ai-messages">
+        <div class="ai-msg user">
+          Agrega una sección de testimonios con 3 cards debajo del hero
+        </div>
+        <div class="ai-msg assistant">
+          Entendido. Voy a crear una sección de testimonios con 3 tarjetas que incluyen: foto del cliente, nombre, empresa, y texto del testimonio. La coloco justo después del Hero Section.
+          <br><br>
+          <span style="color:#10b981;">✓ Sección agregada al canvas</span>
+        </div>
+        <div class="ai-msg user">
+          Cambia los colores del hero a un gradiente azul oscuro con texto blanco
+        </div>
+        <div class="ai-msg assistant">
+          Listo, apliqué un gradiente de #1e3a5f a #3b82f6 al fondo del Hero Section y cambié todo el texto a blanco. El botón ahora tiene fondo blanco con texto azul para mantener el contraste.
+          <br><br>
+          <span style="color:#10b981;">✓ Estilos actualizados</span>
+        </div>
+      </div>
+      <div class="ai-input-area">
+        <input class="ai-input" placeholder="Describe lo que necesitas...">
+        <button class="ai-send">Enviar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 6: TEMPLATES -->
+<!-- ========================================== -->
+<div class="screen" id="templates">
+  <div class="screen-title">06 — Templates <span>Ruta: /empresas/:empresaId/templates + /templates (globales)</span></div>
+  <div class="screen-body">
+    <div class="sidebar">
+      <div class="logo">⬡ Empresa Alpha</div>
+      <div class="menu-section">Empresa</div>
+      <div class="menu-item"><span class="menu-icon">🏠</span> Inicio</div>
+      <div class="menu-item"><span class="menu-icon">📁</span> Proyectos</div>
+      <div class="menu-item active"><span class="menu-icon">📋</span> Templates</div>
+      <div class="menu-section">Cuenta</div>
+      <div class="menu-item"><span class="menu-icon">👤</span> Mi Perfil</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <div class="topbar">
+        <div class="breadcrumb">Empresa Alpha / <strong>Templates</strong></div>
+        <div class="user-info">
+          <span>Jose</span>
+          <div class="avatar">J</div>
+        </div>
+      </div>
+      <div class="main">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2>Templates</h2>
+          <button class="btn btn-primary">+ Crear Template</button>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:20px;">
+          <button class="btn btn-primary">Todos</button>
+          <button class="btn btn-secondary">🌐 Globales (23)</button>
+          <button class="btn btn-secondary">🏢 Mi Empresa (3)</button>
+        </div>
+
+        <div class="cards" style="grid-template-columns:repeat(auto-fill, minmax(220px, 1fr));">
+          <div class="template-card">
+            <div class="template-preview">🏢</div>
+            <div class="template-info">
+              <div class="template-name">Corporativo Pro</div>
+              <div class="template-desc">Portal corporativo completo con secciones estándar</div>
+              <div class="template-tags">
+                <span class="tag">🌐 Global</span>
+                <span class="tag">12 páginas</span>
+                <span class="tag">Responsive</span>
+              </div>
+            </div>
+          </div>
+          <div class="template-card">
+            <div class="template-preview" style="background:linear-gradient(135deg, #fce7f3, #fecdd3);">🚀</div>
+            <div class="template-info">
+              <div class="template-name">Landing Page</div>
+              <div class="template-desc">Landing con hero, features, testimonios y CTA</div>
+              <div class="template-tags">
+                <span class="tag">🌐 Global</span>
+                <span class="tag">1 página</span>
+                <span class="tag">Conversión</span>
+              </div>
+            </div>
+          </div>
+          <div class="template-card">
+            <div class="template-preview" style="background:linear-gradient(135deg, #dcfce7, #d1fae5);">📝</div>
+            <div class="template-info">
+              <div class="template-name">Blog Starter</div>
+              <div class="template-desc">Blog con listado de posts, categorías y búsqueda</div>
+              <div class="template-tags">
+                <span class="tag">🌐 Global</span>
+                <span class="tag">5 páginas</span>
+                <span class="tag">Blog</span>
+              </div>
+            </div>
+          </div>
+          <div class="template-card">
+            <div class="template-preview" style="background:linear-gradient(135deg, #fef3c7, #fde68a);">🏢</div>
+            <div class="template-info">
+              <div class="template-name">Alpha - Servicios</div>
+              <div class="template-desc">Template interno para páginas de servicios de Alpha</div>
+              <div class="template-tags">
+                <span class="tag" style="background:#dbeafe;">🏢 Mi Empresa</span>
+                <span class="tag">4 páginas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- PANTALLA 7: ADMIN USUARIOS -->
+<!-- ========================================== -->
+<div class="screen" id="admin-usuarios">
+  <div class="screen-title">07 — Administración de Usuarios <span>Ruta: /admin/usuarios · Solo *systemroot</span></div>
+  <div class="screen-body">
+    <div class="sidebar">
+      <div class="logo">⬡ Gen Portales</div>
+      <div class="menu-section">Principal</div>
+      <div class="menu-item"><span class="menu-icon">🏢</span> Empresas</div>
+      <div class="menu-item"><span class="menu-icon">📋</span> Templates Globales</div>
+      <div class="menu-section">Administración</div>
+      <div class="menu-item active"><span class="menu-icon">👥</span> Usuarios</div>
+      <div class="menu-item"><span class="menu-icon">🔑</span> Roles y Permisos</div>
+      <div class="menu-section">Sistema</div>
+      <div class="menu-item"><span class="menu-icon">⚙️</span> Configuración</div>
+    </div>
+    <div style="flex:1; display:flex; flex-direction:column;">
+      <div class="topbar">
+        <div class="breadcrumb">Admin / <strong>Usuarios</strong></div>
+        <div class="user-info">
+          <span>Admin</span>
+          <div class="avatar">A</div>
+        </div>
+      </div>
+      <div class="main">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2>Usuarios</h2>
+          <button class="btn btn-primary">+ Invitar Usuario</button>
+        </div>
+
+        <div class="search-bar">
+          <input placeholder="Buscar usuario...">
+          <select style="padding:8px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px;">
+            <option>Todas las empresas</option>
+            <option>Empresa Alpha</option>
+            <option>Empresa Beta</option>
+          </select>
+          <select style="padding:8px; border:1px solid #e2e8f0; border-radius:6px; font-size:13px;">
+            <option>Todos los roles</option>
+            <option>Admin</option>
+            <option>Desarrollador</option>
+            <option>Editor</option>
+          </select>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Empresa</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Jose Luna</strong></td>
+              <td>cbluna99@gmail.com</td>
+              <td>Empresa Alpha</td>
+              <td><span class="card-badge" style="background:#e0e7ff;color:#3730a3;">Desarrollador</span></td>
+              <td><span style="color:#10b981;">● Activo</span></td>
+              <td><button class="btn btn-sm btn-secondary">Editar</button></td>
+            </tr>
+            <tr>
+              <td><strong>María García</strong></td>
+              <td>maria@empresa.com</td>
+              <td>Empresa Alpha</td>
+              <td><span class="card-badge" style="background:#fce7f3;color:#9d174d;">Editor</span></td>
+              <td><span style="color:#10b981;">● Activo</span></td>
+              <td><button class="btn btn-sm btn-secondary">Editar</button></td>
+            </tr>
+            <tr>
+              <td><strong>Carlos Mendez</strong></td>
+              <td>carlos@beta.com</td>
+              <td>Empresa Beta</td>
+              <td><span class="card-badge" style="background:#e0e7ff;color:#3730a3;">Desarrollador</span></td>
+              <td><span style="color:#10b981;">● Activo</span></td>
+              <td><button class="btn btn-sm btn-secondary">Editar</button></td>
+            </tr>
+            <tr>
+              <td><strong>Ana Torres</strong></td>
+              <td>ana@gamma.com</td>
+              <td>Empresa Gamma</td>
+              <td><span class="card-badge" style="background:#fce7f3;color:#9d174d;">Editor</span></td>
+              <td><span style="color:#f59e0b;">● Invitado</span></td>
+              <td><button class="btn btn-sm btn-secondary">Editar</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
