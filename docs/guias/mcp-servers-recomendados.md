@@ -119,6 +119,7 @@ Para configuración manual: **Manage MCP Servers → View raw config**
 
 Antigravity permite despachar múltiples agentes simultáneamente. Para este proyecto
 podrías tener:
+
 - Agente 1: Trabajando en el frontend (Next.js)
 - Agente 2: Trabajando en el backend (NestJS)
 - Agente 3: Trabajando en el schema de Prisma

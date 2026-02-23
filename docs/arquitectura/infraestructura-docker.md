@@ -108,17 +108,20 @@ PostgreSQL, Redis, y MinIO API solo son accesibles desde la red interna de Docke
 ## Roadmap de Infraestructura
 
 ### Fase 1 — Desarrollo local
+
 - Docker Compose con todos los servicios
 - Hot-reload, debugging tools
 - Un solo comando: `docker compose -f docker-compose.dev.yml up`
 
 ### Fase 2 — Staging/Producción inicial
+
 - VPS (Hetzner/DigitalOcean) con Docker Compose
 - Nginx como reverse proxy + Let's Encrypt SSL
 - Backups automáticos de PostgreSQL y MinIO
 - Costo estimado: $15-25/mes
 
 ### Fase 3 — Escalamiento
+
 - Migración a Kubernetes (DigitalOcean K8s o AWS EKS)
 - PostgreSQL managed (RDS o equivalente)
 - Auto-scaling de api y web

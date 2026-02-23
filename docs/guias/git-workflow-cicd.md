@@ -248,12 +248,14 @@ jobs:
 ## Protección de Ramas
 
 ### Branch `main`
+
 - Requiere PR aprobado (mínimo 1 review)
 - Requiere que CI pase (lint + test + build)
 - No permite push directo
 - No permite force push
 
 ### Branch `develop`
+
 - Requiere PR aprobado
 - Requiere que CI pase
 - No permite push directo

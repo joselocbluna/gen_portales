@@ -17,10 +17,13 @@
 ## Retrospectiva
 
 ### ¿Qué salió bien?
+
 - ...
 
 ### ¿Qué se puede mejorar?
+
 - ...
 
 ### Acciones de mejora
+
 - [ ] ...

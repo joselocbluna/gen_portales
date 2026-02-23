@@ -5,6 +5,7 @@
 ## Instrucciones Generales para Stitch
 
 Antes de enviar cada prompt, configura en Stitch:
+
 - **Framework:** React (Next.js compatible)
 - **Estilo:** Tailwind CSS
 - **Tema:** Modo oscuro para sidebar, modo claro para contenido

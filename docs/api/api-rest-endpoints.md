@@ -76,6 +76,7 @@ PUT    /auth/me/password        → Cambiar contraseña propia
 ```
 
 ### POST /auth/login
+
 ```json
 // Request
 { "email": "jose@empresa.com", "password": "..." }
@@ -108,6 +109,7 @@ PUT    /auth/me/password        → Cambiar contraseña propia
 ```
 
 ### GET /auth/me
+
 ```
 Headers: Authorization: Bearer <accessToken>
 
@@ -152,6 +154,7 @@ DELETE /empresas/:id/usuarios/:userId → Remover usuario de la empresa
 ```
 
 ### GET /empresas
+
 ```
 Query params:
   ?page=1&limit=20&search=alpha&isActive=true
@@ -180,6 +183,7 @@ Query params:
 ```
 
 ### POST /empresas
+
 ```json
 // Request (solo admin *systemroot)
 {
@@ -217,6 +221,7 @@ DELETE /empresas/:empresaId/proyectos/:id/usuarios/:userId → Desasignar
 ```
 
 ### POST /empresas/:empresaId/proyectos
+
 ```json
 // Request
 {
@@ -261,6 +266,7 @@ POST   /proyectos/:proyectoId/paginas/:id/versions/:v/restore → Restaurar vers
 ```
 
 ### GET /proyectos/:proyectoId/paginas/:id
+
 ```json
 // Response 200 — Contenido completo para el editor
 {
@@ -296,6 +302,7 @@ POST   /proyectos/:proyectoId/paginas/:id/versions/:v/restore → Restaurar vers
 ```
 
 ### PUT /proyectos/:proyectoId/paginas/:id
+
 ```json
 // Request — El editor envía esto al guardar
 {
@@ -329,6 +336,7 @@ GET    /templates/:id/preview               → Preview del template
 ```
 
 ### GET /templates
+
 ```
 Query params:
   ?scope=GLOBAL|COMPANY&category=landing&search=corporativo&page=1&limit=20
@@ -369,6 +377,7 @@ POST   /media/upload-multiple               → Subir múltiples archivos
 ```
 
 ### POST /media/upload
+
 ```
 Content-Type: multipart/form-data
 
@@ -413,6 +422,7 @@ GET    /proyectos/:proyectoId/builds/:id/download → Descargar build (zip)
 ```
 
 ### POST /proyectos/:proyectoId/builds
+
 ```json
 // Request
 { "comment": "Build para revisión del cliente" }
@@ -457,6 +467,7 @@ POST   /ai/improve-styles                   → Sugerir mejoras de estilos
 ```
 
 ### POST /ai/chat (Streaming via SSE)
+
 ```json
 // Request
 {
@@ -480,6 +491,7 @@ data: {"type":"done","message":"✓ Sección agregada al canvas"}
 ```
 
 ### POST /ai/generate-section
+
 ```json
 // Request
 {

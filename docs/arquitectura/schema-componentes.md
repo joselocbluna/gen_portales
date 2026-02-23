@@ -6,6 +6,7 @@
 ## Propósito
 
 Este schema es el **contrato compartido** entre tres sistemas:
+
 1. **Editor Canvas (dnd-kit):** Lee y escribe este JSON como estado del canvas
 2. **Asistente IA:** Recibe y devuelve fragmentos de este JSON
 3. **Generador Astro:** Consume este JSON para producir código .astro

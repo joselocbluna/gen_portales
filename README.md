@@ -35,60 +35,72 @@ generadorportales/
 ## Guía de Uso por Directorio
 
 ### `docs/producto/`
+
 **Qué guardar:** Visión del producto, roadmap, épicas, historias de usuario, criterios de aceptación.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `vision.md`, `roadmap.md`, `epica-01-generacion-sitios.md`
 
 ### `docs/arquitectura/`
+
 **Qué guardar:** Diagramas de arquitectura, stack tecnológico, patrones de diseño elegidos, modelo de datos.
 **Formato recomendado:** Markdown (.md) + diagramas Mermaid (.mermaid) o SVG
 **Ejemplo de archivos:** `stack-tecnologico.md`, `modelo-datos.md`, `diagrama-sistema.mermaid`
 
 ### `docs/api/`
+
 **Qué guardar:** Definiciones de API (REST/GraphQL), schemas, contratos entre servicios.
 **Formato recomendado:** Markdown (.md), OpenAPI/Swagger (.yaml), JSON Schema (.json)
 **Ejemplo de archivos:** `api-portales.md`, `openapi.yaml`, `schemas/portal.json`
 
 ### `docs/decisiones/`
+
 **Qué guardar:** ADRs — cada decisión técnica importante con contexto, opciones evaluadas y resultado.
 **Formato recomendado:** Markdown (.md) numerados secuencialmente
 **Ejemplo de archivos:** `001-framework-frontend.md`, `002-base-de-datos.md`
 
 ### `docs/sprints/`
+
 **Qué guardar:** Objetivos del sprint, tareas completadas, retrospectivas, velocidad del equipo.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `sprint-01-planning.md`, `sprint-01-retro.md`
 
 ### `docs/guias/`
+
 **Qué guardar:** Setup del proyecto, convenciones de código, flujo de Git, guía de contribución.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `setup-local.md`, `convenciones-codigo.md`, `git-workflow.md`
 
 ### `context/requisitos/`
+
 **Qué guardar:** Requisitos funcionales (RF) y no funcionales (RNF) del sistema.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `rf-generacion-portales.md`, `rnf-rendimiento.md`
 
 ### `context/reglas-negocio/`
+
 **Qué guardar:** Lógica de dominio, validaciones, flujos de negocio, glosario de términos.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `reglas-plantillas.md`, `flujo-publicacion.md`, `glosario.md`
 
 ### `context/research/`
+
 **Qué guardar:** Investigación de mercado, análisis de competidores, benchmarks técnicos, pruebas de concepto.
 **Formato recomendado:** Markdown (.md)
 **Ejemplo de archivos:** `competidores-generadores-web.md`, `benchmark-rendimiento-ssr.md`
 
 ### `context/conversaciones/`
+
 **Qué guardar:** Resúmenes de sesiones de trabajo con IA (como esta), decisiones tomadas, ideas discutidas.
 **Formato recomendado:** Markdown (.md) con fecha en el nombre
 **Ejemplo de archivos:** `2026-02-22-estructura-inicial.md`, `2026-02-23-definicion-stack.md`
 
 ### `templates/`
+
 **Qué guardar:** Plantillas para crear nuevos documentos rápidamente.
 **Formato recomendado:** Markdown (.md)
 
 ### `assets/diagramas/` y `assets/mockups/`
+
 **Qué guardar:** Recursos visuales del proyecto.
 **Formato recomendado:** SVG, PNG, Mermaid (.mermaid), Figma exports
 

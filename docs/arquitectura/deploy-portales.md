@@ -5,6 +5,7 @@
 ## El Problema
 
 Cuando un usuario hace clic en "Publicar" en el editor, el sistema necesita:
+
 1. Tomar el JSON del canvas de todas las páginas
 2. Generar un proyecto Astro funcional
 3. Ejecutar `astro build` para producir HTML/CSS/JS estático
@@ -13,7 +14,7 @@ Cuando un usuario hace clic en "Publicar" en el editor, el sistema necesita:
 
 ## Flujo Completo de Publicación
 
-```
+```text
   Usuario hace clic en "Publicar"
           │
           ▼
@@ -66,7 +67,7 @@ Cuando un usuario hace clic en "Publicar" en el editor, el sistema necesita:
 Los builds estáticos se suben a un bucket de MinIO y Nginx los sirve
 como sitios estáticos. Es la opción más simple y económica.
 
-```
+```text
 Estructura en MinIO:
   portales/
   ├── empresa-alpha/
@@ -113,6 +114,7 @@ server {
 ```
 
 **URLs resultantes:**
+
 - `portal-corporativo.portales.tudominio.com`
 - `landing-producto.portales.tudominio.com`
 
@@ -121,7 +123,7 @@ server {
 Subir el build a Cloudflare Pages vía API para distribución global.
 Cada portal es un "proyecto" en Cloudflare Pages.
 
-```
+```text
 Ventajas:
   - CDN global (edge locations en todo el mundo)
   - SSL automático
@@ -140,7 +142,7 @@ Integración:
 Similar a Cloudflare Pages pero con ecosistema más amplio.
 Vercel tiene integración nativa con Astro.
 
-```
+```text
 Ventajas:
   - Deploy automático desde API
   - Preview deployments
@@ -156,7 +158,7 @@ Desventajas:
 
 ### Fase 1 — MVP (Inicio)
 
-```
+```text
 MinIO + Nginx (self-hosted)
   - Costo: $0 extra (ya tienes MinIO y Nginx)
   - Subdominios: *.portales.tudominio.com
@@ -166,7 +168,7 @@ MinIO + Nginx (self-hosted)
 
 ### Fase 2 — Escalamiento
 
-```
+```text
 Cloudflare R2 (storage) + Cloudflare Pages (CDN)
   - MinIO se reemplaza por R2 (compatible S3)
   - Portales se sirven desde CDN global
@@ -176,7 +178,7 @@ Cloudflare R2 (storage) + Cloudflare Pages (CDN)
 
 ### Fase 3 — Enterprise
 
-```
+```text
 Multi-CDN + Dominios Custom + Analytics
   - Cada empresa puede configurar su propio dominio
   - Dashboard de analytics por portal
@@ -188,7 +190,7 @@ Multi-CDN + Dominios Custom + Analytics
 
 ### Estrategia de subdominios (Fase 1)
 
-```
+```text
 Dominio base: portales.generador.com
 
 Portales publicados:
@@ -203,7 +205,7 @@ Requiere:
 
 ### Dominios custom (Fase 2+)
 
-```
+```text
 La empresa quiere que su portal sea accesible en:
   www.empresa-alpha.com
 
@@ -260,11 +262,11 @@ Agregar al docker-compose:
 
 ## Resumen de URLs del Sistema
 
-| Servicio | URL | Puerto |
-|----------|-----|--------|
-| Frontend (editor/dashboard) | http://localhost:4000 | 4000 |
-| API NestJS | http://localhost:4001 | 4001 |
-| Portales generados (preview) | http://localhost:4080 | 4080 |
-| MinIO Console | http://localhost:9003 | 9003 |
-| PostgreSQL | localhost:5433 | 5433 |
-| Redis | localhost:6380 | 6380 |
+| Servicio                     | URL                      | Puerto |
+| ---------------------------- | ------------------------ | ------ |
+| Frontend (editor/dashboard)  | <http://localhost:4000>  | 4000   |
+| API NestJS                   | <http://localhost:4001>  | 4001   |
+| Portales generados (preview) | <http://localhost:4080>  | 4080   |
+| MinIO Console                | <http://localhost:9003>  | 9003   |
+| PostgreSQL                   | localhost:5433           | 5433   |
+| Redis                        | localhost:6380           | 6380   |

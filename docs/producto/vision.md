@@ -22,16 +22,19 @@ Sistema de permisos: RBAC (Role-Based Access Control)
 ## Funcionalidades Principales
 
 ### 1. Autenticación y Gestión de Usuarios
+
 - Login/registro con sistema de roles
 - Gestión de permisos por rol (RBAC)
 - Invitación de colaboradores a proyectos
 
 ### 2. Dashboard / Menú Principal
+
 - Vista general de proyectos
 - Acceso rápido a templates
 - Gestión de empresas asociadas
 
 ### 3. Editor Visual (Canvas)
+
 - Drag-and-drop de componentes
 - Edición de atributos de componentes en tiempo real
 - Vista de páginas y secciones
@@ -39,21 +42,25 @@ Sistema de permisos: RBAC (Role-Based Access Control)
 - Responsive preview (desktop, tablet, móvil)
 
 ### 4. Gestión de Proyectos
+
 - Crear proyectos asociados a empresas
 - Organizar portales por proyecto
 - Historial de versiones
 
 ### 5. Sistema de Templates
+
 - Templates predefinidos para arrancar rápido
 - Guardar diseños como templates reutilizables
 - Catálogo de templates compartidos
 
 ### 6. Generación de Portales
+
 - Exportar portales como sitios web funcionales
 - Optimización automática (imágenes, código)
 - Deploy integrado (futuro)
 
 ### 7. Gestión de Medios
+
 - Upload y organización de imágenes y video
 - Procesamiento automático (thumbnails, optimización)
 - Biblioteca de medios por proyecto

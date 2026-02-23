@@ -70,6 +70,7 @@ del estado del canvas. Con dnd-kit, el árbol de componentes es un JSON que se c
 el editor visual, el agente de IA, y el motor de generación. GrapesJS sería una barrera para esto.
 
 **Stack del editor:**
+
 - dnd-kit → Drag & drop
 - Zustand o Jotai → Estado global del canvas
 - Monaco Editor → Editor de código inline (rol Desarrollador)
@@ -103,6 +104,7 @@ se puede extraer a un microservicio Go sin afectar el resto.
 **Decisión: Astro como target de output, invocado desde NestJS (GeneradorModule)**
 
 El GeneradorModule en NestJS toma el JSON del canvas y produce proyectos Astro funcionales:
+
 1. Recibe JSON del canvas (páginas → secciones → componentes → atributos)
 2. Mapea componentes del JSON a componentes .astro
 3. Genera páginas con layouts y secciones
@@ -137,6 +139,7 @@ complementa con Sharp para el pipeline completo de procesamiento de imágenes.
 
 En lugar de un servicio externo como Keycloak (demasiado pesado para el inicio) o Auth.js
 (diseñado para Next.js, no para NestJS), se implementa autenticación directamente en NestJS:
+
 - Passport.js + JWT para tokens
 - Guards personalizados para RBAC (verifican rol + empresa del usuario)
 - Prisma para almacenar usuarios, roles y permisos en PostgreSQL

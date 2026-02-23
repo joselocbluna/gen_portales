@@ -27,6 +27,7 @@
 Responsable de toda la lógica de negocio, autenticación, y comunicación.
 
 **Módulos:**
+
 - AuthModule → Login, registro, JWT, Guards RBAC
 - EmpresasModule → CRUD empresas, *systemroot
 - ProyectosModule → CRUD proyectos asociados a empresas
@@ -36,6 +37,7 @@ Responsable de toda la lógica de negocio, autenticación, y comunicación.
 - WebSocket Gateway → Comunicación en tiempo real para el editor
 
 **Tecnologías clave:**
+
 - Prisma ORM para PostgreSQL (type-safe, migraciones)
 - Passport.js + JWT para autenticación
 - Guards personalizados para RBAC por rol y por empresa
@@ -46,6 +48,7 @@ Responsable de toda la lógica de negocio, autenticación, y comunicación.
 Toma el JSON del canvas (estado del editor) y produce un proyecto Astro funcional.
 
 **Flujo:**
+
 1. Recibe el JSON del canvas (páginas, secciones, componentes, atributos)
 2. Mapea cada componente del JSON a un componente Astro (.astro)
 3. Genera las páginas con sus layouts y secciones
@@ -55,6 +58,7 @@ Toma el JSON del canvas (estado del editor) y produce un proyecto Astro funciona
 7. Almacena el build para deploy o descarga
 
 **Por qué Astro:**
+
 - Genera sitios estáticos ultrarrápidos
 - Modelo de "islas" para interactividad selectiva
 - Optimización de imágenes integrada
@@ -66,6 +70,7 @@ Toma el JSON del canvas (estado del editor) y produce un proyecto Astro funciona
 Gestiona todo el ciclo de vida de medios del sistema.
 
 **Flujo:**
+
 1. Usuario sube imagen desde el editor → API recibe el archivo
 2. Sharp procesa: genera thumbnail, versión optimizada, WebP, AVIF
 3. Se almacenan todas las versiones en MinIO con nomenclatura consistente
@@ -73,6 +78,7 @@ Gestiona todo el ciclo de vida de medios del sistema.
 5. El editor muestra el thumbnail; el generador usa la versión optimizada
 
 **Procesamiento con Sharp:**
+
 - Redimensionamiento responsive (múltiples tamaños)
 - Conversión a WebP y AVIF (formatos modernos)
 - Compresión inteligente

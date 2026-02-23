@@ -82,6 +82,7 @@ app/
 ## Menú de Navegación (Sidebar)
 
 ### Admin (*systemroot)
+
 - Inicio (dashboard global)
 - Empresas (listado + crear)
 - Templates Globales
@@ -89,12 +90,14 @@ app/
 - Configuración
 
 ### Desarrollador
+
 - Inicio (dashboard de mi empresa)
 - Proyectos (mis proyectos)
 - Templates (empresa + globales)
 - Mi Perfil
 
 ### Editor
+
 - Inicio (dashboard de mi empresa)
 - Proyectos (mis proyectos asignados)
 - Templates (solo lectura)
