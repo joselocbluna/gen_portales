@@ -1,0 +1,15 @@
+{
+  "name": "gen_portales",
+  "version": "1.0.0",
+  "description": "Este repositorio contiene la documentación y contexto del proyecto **Generador de Portales**. Está diseñado para que cualquier agente de IA o desarrollador pueda entender el proyecto rápidamente y contribuir con contexto completo.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
