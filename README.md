@@ -8,7 +8,7 @@ rápidamente y contribuir con contexto completo.
 
 ## Estructura de Directorios
 
-```
+```text
 generadorportales/
 ├── docs/                    # Documentación técnica y de producto
 │   ├── producto/            # Visión, roadmap, historias de usuario
@@ -28,8 +28,7 @@ generadorportales/
 └── assets/                  # Recursos visuales
     ├── diagramas/           # Diagramas técnicos (Mermaid, draw.io, SVG)
     └── mockups/             # Wireframes y diseños de UI
-```
-
+```text
 ---
 
 ## Guía de Uso por Directorio
@@ -108,13 +107,13 @@ generadorportales/
 
 ## Formatos Recomendados y Por Qué
 
-| Formato | Uso | Razón |
-|---------|-----|-------|
-| `.md` (Markdown) | Documentación general | Universal, versionable con Git, legible por humanos y por IA |
-| `.mermaid` | Diagramas | Renderizable, versionable, editable como texto |
-| `.yaml` / `.json` | Schemas, configs, API specs | Estructurado, parseable por código y por IA |
-| `.svg` | Diagramas exportados | Escalable, ligero, versionable |
-| `.png` | Mockups, capturas | Visual, fácil de compartir |
+| Formato           | Uso                         | Razón                                                        |
+| ----------------- | --------------------------- | ------------------------------------------------------------ |
+| `.md` (Markdown)  | Documentación general       | Universal, versionable con Git, legible por humanos y por IA |
+| `.mermaid`        | Diagramas                   | Renderizable, versionable, editable como texto               |
+| `.yaml` / `.json` | Schemas, configs, API specs | Estructurado, parseable por código y por IA                  |
+| `.svg`            | Diagramas exportados        | Escalable, ligero, versionable                               |
+| `.png`            | Mockups, capturas           | Visual, fácil de compartir                                   |
 
 ---
 

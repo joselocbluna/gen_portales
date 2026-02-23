@@ -22,8 +22,8 @@ Se definió la estructura de directorios y tipos de archivos para la base de con
 - **Generador: Astro** invocado programáticamente desde NestJS GeneradorModule
 - **Auth: Passport.js + JWT + Guards RBAC** en NestJS (sin Keycloak ni Auth.js)
 - **Monorepo: Turborepo** con @generador/shared para tipos compartidos
-- **Modelo multi-tenant:** empresa *systemroot* como raíz global
-- **Roles definidos:** Admin (*systemroot), Desarrollador, Editor — con RBAC
+- **Modelo multi-tenant:** empresa _systemroot_ como raíz global
+- **Roles definidos:** Admin (\*systemroot), Desarrollador, Editor — con RBAC
 - **IA: Vercel AI SDK** para streaming de respuestas del agente en el editor
 
 ## Estructura Creada

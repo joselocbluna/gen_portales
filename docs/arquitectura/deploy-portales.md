@@ -58,8 +58,7 @@ Cuando un usuario hace clic en "Publicar" en el editor, el sistema necesita:
   │  6. Asignar dominio      │
   │  Actualizar DNS/proxy    │
   └──────────────────────────┘
-```
-
+```text
 ## Opciones de Hosting para Portales Generados
 
 ### Opción A: MinIO + Nginx (Self-hosted) — Recomendada para empezar
@@ -85,8 +84,7 @@ Estructura en MinIO:
   │       └── ...
   └── empresa-beta/
       └── ...
-```
-
+```text
 ```nginx
 # Nginx config para servir portales
 server {
@@ -111,8 +109,7 @@ server {
         }
     }
 }
-```
-
+```text
 **URLs resultantes:**
 
 - `portal-corporativo.portales.tudominio.com`
@@ -135,8 +132,7 @@ Integración:
   POST https://api.cloudflare.com/client/v4/accounts/{id}/pages/projects/{project}/deployments
   Content-Type: multipart/form-data
   Body: [archivos del build]
-```
-
+```text
 ### Opción C: Vercel / Netlify
 
 Similar a Cloudflare Pages pero con ecosistema más amplio.
@@ -152,8 +148,7 @@ Ventajas:
 Desventajas:
   - Costos pueden escalar con muchos portales
   - Dependencia del vendor
-```
-
+```text
 ## Estrategia Recomendada por Fase
 
 ### Fase 1 — MVP (Inicio)
@@ -164,8 +159,7 @@ MinIO + Nginx (self-hosted)
   - Subdominios: *.portales.tudominio.com
   - SSL: Let's Encrypt wildcard
   - Deploy: NestJS sube el /dist a MinIO, Nginx lo sirve
-```
-
+```text
 ### Fase 2 — Escalamiento
 
 ```text
@@ -174,8 +168,7 @@ Cloudflare R2 (storage) + Cloudflare Pages (CDN)
   - Portales se sirven desde CDN global
   - Dominios custom por empresa: portal.empresa-alpha.com
   - SSL automático por dominio
-```
-
+```text
 ### Fase 3 — Enterprise
 
 ```text
@@ -184,8 +177,7 @@ Multi-CDN + Dominios Custom + Analytics
   - Dashboard de analytics por portal
   - A/B testing integrado
   - Edge functions para formularios y dinámico
-```
-
+```text
 ## Dominios y DNS
 
 ### Estrategia de subdominios (Fase 1)
@@ -201,8 +193,7 @@ Requiere:
   - Un registro DNS wildcard: *.portales.generador.com → IP del servidor
   - Certificado SSL wildcard (Let's Encrypt)
   - Nginx como reverse proxy que rutea por subdomain
-```
-
+```text
 ### Dominios custom (Fase 2+)
 
 ```text
@@ -219,8 +210,7 @@ Tabla en PostgreSQL:
   custom_domains
     id          | portal_id    | domain               | ssl_status | verified
     dom_001     | prj_def456   | www.empresa-alpha.com | ACTIVE     | true
-```
-
+```text
 ## Modelo de Datos Adicional (agregar al Prisma schema)
 
 ```prisma
@@ -237,36 +227,34 @@ model CustomDomain {
 
   @@map("custom_domains")
 }
-```
-
+```text
 ## Docker Config — Nginx para servir portales
 
 Agregar al docker-compose:
 
 ```yaml
-  # Servidor de portales generados
-  portal-server:
-    container_name: gen_por-portal-server
-    image: nginx:alpine
-    ports:
-      - "${PORTAL_PORT:-4080}:80"
-      - "${PORTAL_SSL_PORT:-4443}:443"
-    volumes:
-      - ./config/nginx/portales.conf:/etc/nginx/conf.d/default.conf
-      - ./config/nginx/ssl:/etc/nginx/ssl
-    depends_on:
-      - minio
-    networks:
-      - generador-net
-```
-
+# Servidor de portales generados
+portal-server:
+  container_name: gen_por-portal-server
+  image: nginx:alpine
+  ports:
+    - "${PORTAL_PORT:-4080}:80"
+    - "${PORTAL_SSL_PORT:-4443}:443"
+  volumes:
+    - ./config/nginx/portales.conf:/etc/nginx/conf.d/default.conf
+    - ./config/nginx/ssl:/etc/nginx/ssl
+  depends_on:
+    - minio
+  networks:
+    - generador-net
+```text
 ## Resumen de URLs del Sistema
 
-| Servicio                     | URL                      | Puerto |
-| ---------------------------- | ------------------------ | ------ |
-| Frontend (editor/dashboard)  | <http://localhost:4000>  | 4000   |
-| API NestJS                   | <http://localhost:4001>  | 4001   |
-| Portales generados (preview) | <http://localhost:4080>  | 4080   |
-| MinIO Console                | <http://localhost:9003>  | 9003   |
-| PostgreSQL                   | localhost:5433           | 5433   |
-| Redis                        | localhost:6380           | 6380   |
+| Servicio                     | URL                     | Puerto |
+| ---------------------------- | ----------------------- | ------ |
+| Frontend (editor/dashboard)  | <http://localhost:4000> | 4000   |
+| API NestJS                   | <http://localhost:4001> | 4001   |
+| Portales generados (preview) | <http://localhost:4080> | 4080   |
+| MinIO Console                | <http://localhost:9003> | 9003   |
+| PostgreSQL                   | localhost:5433          | 5433   |
+| Redis                        | localhost:6380          | 6380   |

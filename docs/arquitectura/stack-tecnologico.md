@@ -5,20 +5,20 @@
 
 ## Resumen del Stack
 
-| Capa | Tecnología | Propósito |
-|------|-----------|-----------|
-| Frontend | Next.js (App Router) | Dashboard, editor, preview |
-| Editor | dnd-kit + Zustand + Monaco | Canvas visual + drag-and-drop |
-| Backend/API | NestJS (TypeScript) | API gateway, RBAC, lógica de negocio |
-| ORM | Prisma | Acceso type-safe a PostgreSQL |
-| Base de datos | PostgreSQL | Persistencia principal |
-| Caché | Redis | Sesiones, estado del editor, caché |
-| Almacenamiento | MinIO (S3-compatible) | Imágenes, videos, assets |
-| Procesamiento imágenes | Sharp (libvips) | Thumbnails, optimización, WebP/AVIF |
-| Generador de portales | Astro (invocado desde NestJS) | Output final de sitios web |
-| IA | Vercel AI SDK | Asistente en el editor |
-| Monorepo | Turborepo | Gestión de packages compartidos |
-| Tipos compartidos | @generador/shared | Schema JSON, tipos de dominio |
+| Capa                   | Tecnología                    | Propósito                            |
+| ---------------------- | ----------------------------- | ------------------------------------ |
+| Frontend               | Next.js (App Router)          | Dashboard, editor, preview           |
+| Editor                 | dnd-kit + Zustand + Monaco    | Canvas visual + drag-and-drop        |
+| Backend/API            | NestJS (TypeScript)           | API gateway, RBAC, lógica de negocio |
+| ORM                    | Prisma                        | Acceso type-safe a PostgreSQL        |
+| Base de datos          | PostgreSQL                    | Persistencia principal               |
+| Caché                  | Redis                         | Sesiones, estado del editor, caché   |
+| Almacenamiento         | MinIO (S3-compatible)         | Imágenes, videos, assets             |
+| Procesamiento imágenes | Sharp (libvips)               | Thumbnails, optimización, WebP/AVIF  |
+| Generador de portales  | Astro (invocado desde NestJS) | Output final de sitios web           |
+| IA                     | Vercel AI SDK                 | Asistente en el editor               |
+| Monorepo               | Turborepo                     | Gestión de packages compartidos      |
+| Tipos compartidos      | @generador/shared             | Schema JSON, tipos de dominio        |
 
 ## Tres Motores del Sistema
 
@@ -29,7 +29,7 @@ Responsable de toda la lógica de negocio, autenticación, y comunicación.
 **Módulos:**
 
 - AuthModule → Login, registro, JWT, Guards RBAC
-- EmpresasModule → CRUD empresas, *systemroot
+- EmpresasModule → CRUD empresas, \*systemroot
 - ProyectosModule → CRUD proyectos asociados a empresas
 - TemplatesModule → Templates globales y por empresa
 - MediaModule → Upload/descarga de medios vía MinIO
@@ -87,7 +87,7 @@ Gestiona todo el ciclo de vida de medios del sistema.
 
 ## Estructura del Monorepo
 
-```
+```text
 generador-portales/
 ├── packages/
 │   └── shared/                  # Tipos TypeScript compartidos
@@ -123,11 +123,10 @@ generador-portales/
 ├── turbo.json                   # Turborepo config
 ├── pnpm-workspace.yaml
 └── package.json
-```
-
+```text
 ## Diagrama de Arquitectura
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │                    FRONTEND                          │
 │              Next.js (App Router)                    │
@@ -167,4 +166,4 @@ generador-portales/
   │ (Prisma) │   │ (medios)  │  │ (caché/ │
   │          │   │           │  │ sesiones)│
   └──────────┘   └───────────┘  └─────────┘
-```
+```text

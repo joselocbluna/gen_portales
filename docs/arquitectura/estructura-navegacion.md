@@ -5,7 +5,7 @@
 
 ## Jerarquía del Sistema
 
-```
+```text
 *systemroot (empresa raíz — admin global)
 ├── Templates globales (disponibles para todas las empresas)
 ├── Gestión de usuarios y roles
@@ -22,24 +22,23 @@
 │   └── ...
 │
 └── Empresa N...
-```
-
+```text
 ## Visibilidad por Rol
 
-| Recurso | Admin (*systemroot) | Desarrollador | Editor |
-|---------|:-------------------:|:-------------:|:------:|
-| Todas las empresas | ✅ | ❌ | ❌ |
-| Mi empresa | — | ✅ | ✅ |
-| Proyectos | ✅ (todos) | ✅ (asignados) | ✅ (asignados) |
-| Templates globales | ✅ (CRUD) | ✅ (lectura) | ✅ (lectura) |
-| Templates empresa | ✅ | ✅ (CRUD) | ✅ (lectura) |
-| Editor/Canvas | ✅ | ✅ | ✅ |
-| Panel IA en editor | ✅ | ✅ | ✅ |
-| Gestión usuarios | ✅ | ❌ | ❌ |
+| Recurso            | Admin (\*systemroot) | Desarrollador  |     Editor     |
+| ------------------ | :------------------: | :------------: | :------------: |
+| Todas las empresas |          ✅          |       ❌       |       ❌       |
+| Mi empresa         |          —           |       ✅       |       ✅       |
+| Proyectos          |      ✅ (todos)      | ✅ (asignados) | ✅ (asignados) |
+| Templates globales |      ✅ (CRUD)       |  ✅ (lectura)  |  ✅ (lectura)  |
+| Templates empresa  |          ✅          |   ✅ (CRUD)    |  ✅ (lectura)  |
+| Editor/Canvas      |          ✅          |       ✅       |       ✅       |
+| Panel IA en editor |          ✅          |       ✅       |       ✅       |
+| Gestión usuarios   |          ✅          |       ❌       |       ❌       |
 
 ## Estructura de Rutas (Next.js App Router)
 
-```
+```text
 app/
 ├── (auth)/                        # Rutas públicas
 │   ├── login/page.tsx
@@ -77,11 +76,10 @@ app/
 │   └── ai/                        # Endpoint del asistente IA
 │
 └── middleware.ts                   # Auth + RBAC por ruta
-```
-
+```text
 ## Menú de Navegación (Sidebar)
 
-### Admin (*systemroot)
+### Admin (\*systemroot)
 
 - Inicio (dashboard global)
 - Empresas (listado + crear)

@@ -10,26 +10,25 @@
 // ~/.claude.json o .mcp.json del proyecto
 {
   "mcpServers": {
-
     // 1. Google Stitch — Generación de UI con IA
     // Conecta Stitch para traer diseños generados al código
     "stitch": {
       "command": "npx",
-      "args": ["@_davideast/stitch-mcp", "proxy"]
+      "args": ["@_davideast/stitch-mcp", "proxy"],
     },
 
     // 2. Context7 — Documentación actualizada de librerías
     // Obtiene docs en tiempo real de Next.js, React, NestJS, Prisma, dnd-kit, etc.
     "context7": {
       "command": "npx",
-      "args": ["-y", "@context7/mcp"]
+      "args": ["-y", "@context7/mcp"],
     },
 
     // 3. Sequential Thinking — Razonamiento estructurado
     // Para decisiones de arquitectura y debugging complejo
     "sequential-thinking": {
       "command": "npx",
-      "args": ["-y", "@anthropic/sequential-thinking-mcp"]
+      "args": ["-y", "@anthropic/sequential-thinking-mcp"],
     },
 
     // 4. PostgreSQL MCP — Interacción directa con la BD
@@ -38,8 +37,8 @@
       "command": "npx",
       "args": ["-y", "@anthropic/postgres-mcp"],
       "env": {
-        "DATABASE_URL": "postgresql://generador:generador_dev@localhost:5433/generador_portales"
-      }
+        "DATABASE_URL": "postgresql://generador:generador_dev@localhost:5433/generador_portales",
+      },
     },
 
     // 5. GitHub MCP — Control de versiones
@@ -48,53 +47,50 @@
       "command": "npx",
       "args": ["-y", "@anthropic/github-mcp"],
       "env": {
-        "GITHUB_TOKEN": "tu-github-token"
-      }
+        "GITHUB_TOKEN": "tu-github-token",
+      },
     },
 
     // 6. Memory MCP — Memoria persistente entre sesiones
     // Recuerda decisiones de arquitectura, convenciones, contexto del proyecto
     "memory": {
       "command": "npx",
-      "args": ["-y", "@anthropic/memory-mcp"]
-    }
-  }
+      "args": ["-y", "@anthropic/memory-mcp"],
+    },
+  },
 }
-```
-
+```text
 ### Opcionales pero útiles
 
 ```jsonc
 {
   "mcpServers": {
-
     // 7. Figma MCP — Si usas Figma para diseños
     // Extrae estructura de componentes directamente del diseño
     "figma": {
       "command": "npx",
       "args": ["-y", "@anthropic/figma-mcp"],
       "env": {
-        "FIGMA_ACCESS_TOKEN": "tu-figma-token"
-      }
+        "FIGMA_ACCESS_TOKEN": "tu-figma-token",
+      },
     },
 
     // 8. Task Master — Gestión de tareas desde PRDs
     // Convierte documentos de requisitos en tareas estructuradas
     "task-master": {
       "command": "npx",
-      "args": ["-y", "task-master-ai"]
+      "args": ["-y", "task-master-ai"],
     },
 
     // 9. Docker MCP — Gestión de contenedores
     // Controla Docker desde Claude Code
     "docker": {
       "command": "npx",
-      "args": ["-y", "@anthropic/docker-mcp"]
-    }
-  }
+      "args": ["-y", "@anthropic/docker-mcp"],
+    },
+  },
 }
-```
-
+```text
 ## Para Google Antigravity
 
 ### Configuración de MCPs en Antigravity
@@ -106,14 +102,14 @@ Para configuración manual: **Manage MCP Servers → View raw config**
 
 ### MCPs recomendados para Antigravity
 
-| MCP | Propósito | Prioridad |
-|-----|-----------|-----------|
-| **Google Stitch** | Generación de UI → código en el proyecto | Esencial |
-| **Context7** | Documentación actualizada de frameworks | Esencial |
-| **Sequential Thinking** | Razonamiento para arquitectura | Recomendado |
-| **MCP Toolbox for Databases** | Conexión a PostgreSQL (nativo Google Cloud) | Esencial |
-| **Composio Rube MCP** | Multi-tool integration sin configuración manual | Opcional |
-| **Qdrant MCP** | Guardar y recuperar código funcional | Opcional |
+| MCP                           | Propósito                                       | Prioridad   |
+| ----------------------------- | ----------------------------------------------- | ----------- |
+| **Google Stitch**             | Generación de UI → código en el proyecto        | Esencial    |
+| **Context7**                  | Documentación actualizada de frameworks         | Esencial    |
+| **Sequential Thinking**       | Razonamiento para arquitectura                  | Recomendado |
+| **MCP Toolbox for Databases** | Conexión a PostgreSQL (nativo Google Cloud)     | Esencial    |
+| **Composio Rube MCP**         | Multi-tool integration sin configuración manual | Opcional    |
+| **Qdrant MCP**                | Guardar y recuperar código funcional            | Opcional    |
 
 ### Ventaja de Antigravity: Manager View
 
@@ -144,22 +140,20 @@ npx @_davideast/stitch-mcp init
 # - Habilitación de la API de Stitch
 # - Test de conexión
 # - Generación de config
-```
-
+```text
 ### Autenticación alternativa (API Key)
 
 ```bash
 # Si prefieres usar API Key en vez de OAuth
 export STITCH_API_KEY=tu-api-key-de-stitch
-```
-
+```text
 ### Herramientas disponibles del proxy
 
-| Herramienta | Descripción |
-|-------------|-------------|
-| `build_site` | Construye un sitio desde un proyecto mapeando screens a rutas |
-| `get_screen_code` | Obtiene el HTML/CSS de una pantalla específica |
-| `get_screen_image` | Obtiene screenshot de una pantalla como base64 |
+| Herramienta        | Descripción                                                   |
+| ------------------ | ------------------------------------------------------------- |
+| `build_site`       | Construye un sitio desde un proyecto mapeando screens a rutas |
+| `get_screen_code`  | Obtiene el HTML/CSS de una pantalla específica                |
+| `get_screen_image` | Obtiene screenshot de una pantalla como base64                |
 
 ### Troubleshooting
 
@@ -167,4 +161,4 @@ export STITCH_API_KEY=tu-api-key-de-stitch
 # Si hay problemas de autenticación
 npx @_davideast/stitch-mcp logout --force
 npx @_davideast/stitch-mcp init
-```
+```text

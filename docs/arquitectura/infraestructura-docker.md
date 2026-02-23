@@ -25,21 +25,21 @@ Para evitar conflictos con otros proyectos en Docker Desktop:
 
 ## Servicios
 
-| Servicio | Container | Imagen | Puerto HOST (default) | Puerto Interno | Propósito |
-|----------|-----------|--------|:---------------------:|:--------------:|-----------|
-| web | gen_por-web | Node 20 Alpine + Next.js | 4000 | 3000 | Frontend |
-| api | gen_por-api | Node 20 Alpine + NestJS | 4001 | 3001 | Backend API + WebSockets |
-| postgres | gen_por-postgres | PostgreSQL 16 Alpine | 5433 | 5432 | Base de datos principal |
-| redis | gen_por-redis | Redis 7 Alpine | 6380 | 6379 | Caché, sesiones |
-| minio | gen_por-minio | MinIO latest | 9002, 9003 | 9000, 9001 | Almacenamiento medios |
+| Servicio | Container        | Imagen                   | Puerto HOST (default) | Puerto Interno | Propósito                |
+| -------- | ---------------- | ------------------------ | :-------------------: | :------------: | ------------------------ |
+| web      | gen_por-web      | Node 20 Alpine + Next.js |         4000          |      3000      | Frontend                 |
+| api      | gen_por-api      | Node 20 Alpine + NestJS  |         4001          |      3001      | Backend API + WebSockets |
+| postgres | gen_por-postgres | PostgreSQL 16 Alpine     |         5433          |      5432      | Base de datos principal  |
+| redis    | gen_por-redis    | Redis 7 Alpine           |         6380          |      6379      | Caché, sesiones          |
+| minio    | gen_por-minio    | MinIO latest             |      9002, 9003       |   9000, 9001   | Almacenamiento medios    |
 
 ### Servicios opcionales (desarrollo)
 
-| Servicio | Imagen | Puerto | Propósito |
-|----------|--------|--------|-----------|
-| maildev | maildev/maildev | 1080 | Testing de emails en desarrollo |
-| pgadmin | dpage/pgadmin4 | 5050 | UI para administrar PostgreSQL |
-| redis-commander | rediscommander | 8081 | UI para inspeccionar Redis |
+| Servicio        | Imagen          | Puerto | Propósito                       |
+| --------------- | --------------- | ------ | ------------------------------- |
+| maildev         | maildev/maildev | 1080   | Testing de emails en desarrollo |
+| pgadmin         | dpage/pgadmin4  | 5050   | UI para administrar PostgreSQL  |
+| redis-commander | rediscommander  | 8081   | UI para inspeccionar Redis      |
 
 ## Entornos
 
@@ -63,7 +63,7 @@ Para evitar conflictos con otros proyectos en Docker Desktop:
 
 ## Arquitectura de Red
 
-```
+```text
                     ┌─────────────┐
                     │   Nginx /   │
                     │   Traefik   │  ← Reverse proxy + SSL
@@ -92,18 +92,17 @@ Para evitar conflictos con otros proyectos en Docker Desktop:
    └───────┘ │ └───────────┘  └─────────┘  │
              │     Red interna              │
              └──────────────────────────────┘
-```
-
+```text
 En producción, solo el reverse proxy (Nginx o Traefik) está expuesto al exterior.
 PostgreSQL, Redis, y MinIO API solo son accesibles desde la red interna de Docker.
 
 ## Volúmenes Persistentes
 
-| Volumen | Servicio | Propósito |
-|---------|----------|-----------|
-| pgdata | postgres | Datos de PostgreSQL |
-| minio-data | minio | Archivos almacenados (imágenes, videos) |
-| redis-data | redis | Persistencia de caché (opcional) |
+| Volumen    | Servicio | Propósito                               |
+| ---------- | -------- | --------------------------------------- |
+| pgdata     | postgres | Datos de PostgreSQL                     |
+| minio-data | minio    | Archivos almacenados (imágenes, videos) |
+| redis-data | redis    | Persistencia de caché (opcional)        |
 
 ## Roadmap de Infraestructura
 

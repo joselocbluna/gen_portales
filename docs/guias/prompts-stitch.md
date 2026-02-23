@@ -15,7 +15,7 @@ Antes de enviar cada prompt, configura en Stitch:
 
 ## Prompt 1 — Pantalla de Login
 
-```
+```text
 Diseña una pantalla de login profesional para una plataforma SaaS llamada
 "Generador de Portales". La pantalla se divide en dos mitades:
 
@@ -37,13 +37,12 @@ LADO DERECHO (40% del ancho):
 
 Estilo: limpio, moderno, tipografía Inter o similar sans-serif.
 Framework: React con Tailwind CSS. Responsive para desktop y móvil.
-```
-
+```text
 ---
 
-## Prompt 2 — Dashboard Admin (*systemroot)
+## Prompt 2 — Dashboard Admin (\*systemroot)
 
-```
+```text
 Diseña un dashboard administrativo para un sistema SaaS multi-tenant llamado
 "Generador de Portales". Este dashboard es para el usuario administrador global
 (*systemroot) que puede ver todas las empresas del sistema.
@@ -67,13 +66,12 @@ CONTENIDO PRINCIPAL:
 
 Colores: sidebar #1e293b, acciones #3b82f6, stats cards con bordes suaves.
 Framework: React con Tailwind CSS. Componentes reutilizables.
-```
-
+```text
 ---
 
 ## Prompt 3 — Dashboard de Empresa (usuario normal)
 
-```
+```text
 Diseña el dashboard principal para un usuario que pertenece a una empresa
 específica dentro del sistema "Generador de Portales".
 
@@ -95,13 +93,12 @@ CONTENIDO:
 El diseño debe sentirse como entrar a tu espacio de trabajo personal dentro
 de una empresa. Limpio, organizado, con acceso rápido a proyectos.
 Framework: React con Tailwind CSS.
-```
-
+```text
 ---
 
 ## Prompt 4 — Lista de Proyectos
 
-```
+```text
 Diseña la pantalla de listado de proyectos de una empresa para el sistema
 "Generador de Portales".
 
@@ -123,13 +120,12 @@ CONTENIDO:
 
 Estilo: tabla limpia con hover suave, sin bordes pesados, tipografía de 13px.
 Framework: React con Tailwind CSS.
-```
-
+```text
 ---
 
 ## Prompt 5 — Editor Canvas (PANTALLA PRINCIPAL)
 
-```
+```text
 Diseña un editor visual de páginas web tipo page builder para el sistema
 "Generador de Portales". Esta es la pantalla más importante del sistema.
 El diseño debe ser similar a editores como Webflow, Figma, o WordPress Elementor.
@@ -196,13 +192,12 @@ IMPORTANTE:
 - Los componentes en el panel izquierdo deben parecer "arrastrables" (cursor grab)
 - Todo debe usar React con Tailwind CSS
 - Los paneles laterales deben poder colapsarse
-```
-
+```text
 ---
 
 ## Prompt 6 — Editor Canvas (versión móvil / tablet)
 
-```
+```text
 Diseña la versión responsive del editor canvas del Prompt 5 para tablet y móvil.
 
 TABLET (1024px):
@@ -220,13 +215,12 @@ MÓVIL (768px):
   editarlos en un bottom sheet
 
 Framework: React con Tailwind CSS. Usa breakpoints de Tailwind.
-```
-
+```text
 ---
 
 ## Prompt 7 — Galería de Templates
 
-```
+```text
 Diseña una galería de templates para el sistema "Generador de Portales".
 Los templates son diseños predefinidos que los usuarios pueden usar como
 base para crear nuevos proyectos.
@@ -253,13 +247,12 @@ Templates de ejemplo:
 El hover en cada card debe mostrar una capa semitransparente con los botones
 de acción. La UI debe sentirse como un catálogo/marketplace.
 Framework: React con Tailwind CSS.
-```
-
+```text
 ---
 
 ## Prompt 8 — Panel de Administración de Usuarios
 
-```
+```text
 Diseña el panel de administración de usuarios para el sistema
 "Generador de Portales". Solo accesible por el rol Admin (*systemroot).
 
@@ -287,13 +280,12 @@ Modal de "Invitar Usuario" (diseñar también):
 
 Framework: React con Tailwind CSS. La tabla debe ser responsive
 con scroll horizontal en móvil.
-```
-
+```text
 ---
 
 ## Prompt 9 — Componentes del Sistema de Diseño
 
-```
+```text
 Diseña el sistema de componentes reutilizables (design system) para
 "Generador de Portales". Crea una pantalla tipo storybook/catálogo
 que muestre todos los componentes base del sistema:
@@ -347,8 +339,7 @@ Colores del tema:
 
 Tipografía: Inter
 Framework: React con Tailwind CSS.
-```
-
+```text
 ---
 
 ## Notas de Uso
@@ -389,4 +380,4 @@ build_site --project "generador-portales" --routes '{
   "/empresas/:id/templates": "galeria-templates",
   "/admin/usuarios": "admin-usuarios"
 }'
-```
+```text

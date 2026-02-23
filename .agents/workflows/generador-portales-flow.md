@@ -7,6 +7,7 @@ description: Flujo de trabajo para desarrollo multi-agente en Generador de Porta
 Este flujo está diseñado para aprovechar la arquitectura del monorepo (Turborepo + Next.js + NestJS + Astro) utilizando múltiples agentes en paralelo ("Manager View" de Antigravity).
 
 ## Fase 1: Base de Datos y API Core (Agente Backend)
+
 Este agente se enfoca exclusivamente en la lógica de negocio y persistencia.
 
 1. Navega a `apps/api` y `packages/shared`.
@@ -15,6 +16,7 @@ Este agente se enfoca exclusivamente en la lógica de negocio y persistencia.
 4. Exporta las interfaces y tipos actualizados a `packages/shared`.
 
 ## Fase 2: Motor Generador de Portales (Agente Astro)
+
 Este agente trabaja en el aislamiento de la transformación de JSON a archivos estáticos.
 
 1. Navega a `apps/api/src/generador`.
@@ -23,6 +25,7 @@ Este agente trabaja en el aislamiento de la transformación de JSON a archivos e
 4. Ejecuta pruebas programáticas simulando la compilación con Vercel/Cloudflare hooks.
 
 ## Fase 3: Editor Visual de Portales (Agente Frontend)
+
 Este agente construye la UI interactiva e integra librerías externas.
 
 1. Navega a `apps/web`.
@@ -31,6 +34,7 @@ Este agente construye la UI interactiva e integra librerías externas.
 4. Integrar `dnd-kit` y Zustand para el editor visual del Canvas interactivo.
 
 ## Reglas Globales (A aplicar a todos los agentes)
+
 - Si hay dudas sobre la arquitectura, consultar los documentos en `docs/arquitectura/` y `docs/decisiones/`.
 - Cualquier tipo de datos o contrato debe ir en `packages/shared` para que todos los agentes lo utilicen (Backend, Frontend, Generador).
 - Cada agente debe trabajar en una rama (`branch`) separada bajo Git o coordinar fuertemente a través de un canal si editan los mismos paquetes.

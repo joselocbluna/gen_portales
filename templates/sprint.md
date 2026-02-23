@@ -5,9 +5,9 @@
 
 ## Backlog del Sprint
 
-| ID | Historia / Tarea | Estimación | Asignado | Estado |
-|----|-----------------|------------|----------|--------|
-| HU-001 | ... | X pts | ... | Pendiente / En progreso / Hecho |
+| ID     | Historia / Tarea | Estimación | Asignado | Estado                          |
+| ------ | ---------------- | ---------- | -------- | ------------------------------- |
+| HU-001 | ...              | X pts      | ...      | Pendiente / En progreso / Hecho |
 
 ## Velocidad
 

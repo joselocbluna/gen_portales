@@ -13,7 +13,7 @@ Este schema es el **contrato compartido** entre tres sistemas:
 
 ## Estructura Jerárquica
 
-```
+```text
 Proyecto (Portal)
 └── Páginas[]
     └── Secciones[]
@@ -21,8 +21,7 @@ Proyecto (Portal)
             ├── Props{}
             ├── Estilos{}
             └── Hijos[] (componentes anidados)
-```
-
+```text
 ## Schema Completo (TypeScript)
 
 ```typescript
@@ -41,7 +40,7 @@ export interface PortalState {
 export interface PortalSettings {
   favicon?: string;
   ogImage?: string;
-  language: string;           // "es", "en", etc.
+  language: string; // "es", "en", etc.
   fonts: FontConfig[];
   colorPalette: ColorPalette;
   analytics?: AnalyticsConfig;
@@ -60,16 +59,16 @@ export interface ColorPalette {
   accent: string;
   background: string;
   text: string;
-  [key: string]: string;      // colores personalizados
+  [key: string]: string; // colores personalizados
 }
 
 // === PÁGINAS ===
 export interface Page {
   id: string;
   name: string;
-  slug: string;               // "/", "/nosotros", "/servicios"
-  title: string;              // SEO title
-  description: string;        // SEO meta description
+  slug: string; // "/", "/nosotros", "/servicios"
+  title: string; // SEO title
+  description: string; // SEO meta description
   layout: "default" | "fullwidth" | "sidebar";
   sections: Section[];
   meta: PageMeta;
@@ -78,7 +77,7 @@ export interface Page {
 export interface PageMeta {
   isHomepage: boolean;
   isPublished: boolean;
-  order: number;              // Orden en la navegación
+  order: number; // Orden en la navegación
   showInNav: boolean;
 }
 
@@ -87,8 +86,8 @@ export interface Section {
   id: string;
   name: string;
   type: SectionType;
-  columns: number;            // 1, 2, 3, 4
-  columnLayout?: string;      // "equal", "sidebar-main", "main-sidebar", "custom"
+  columns: number; // 1, 2, 3, 4
+  columnLayout?: string; // "equal", "sidebar-main", "main-sidebar", "custom"
   components: Component[];
   styles: SectionStyles;
   responsive: ResponsiveConfig;
@@ -121,13 +120,13 @@ export interface Component {
   id: string;
   type: ComponentType;
   name: string;
-  props: Record<string, any>;    // Propiedades específicas del componente
+  props: Record<string, any>; // Propiedades específicas del componente
   styles: ComponentStyles;
   responsive: ResponsiveConfig;
-  children?: Component[];         // Componentes anidados
-  events?: EventConfig[];         // Interacciones (futuro)
-  column?: number;                // En qué columna está (0-indexed)
-  order: number;                  // Orden dentro de la columna/sección
+  children?: Component[]; // Componentes anidados
+  events?: EventConfig[]; // Interacciones (futuro)
+  column?: number; // En qué columna está (0-indexed)
+  order: number; // Orden dentro de la columna/sección
 }
 
 export type ComponentType =
@@ -218,8 +217,7 @@ export interface GlobalStyles {
   linkColor: string;
   customCSS?: string;
 }
-```
-
+```text
 ## Ejemplo de JSON del Canvas
 
 ```json
@@ -248,7 +246,12 @@ export interface GlobalStyles {
       "title": "Portal Alpha - Inicio",
       "description": "Bienvenido al portal de Empresa Alpha",
       "layout": "default",
-      "meta": { "isHomepage": true, "isPublished": true, "order": 0, "showInNav": true },
+      "meta": {
+        "isHomepage": true,
+        "isPublished": true,
+        "order": 0,
+        "showInNav": true
+      },
       "sections": [
         {
           "id": "sec-header",
@@ -260,7 +263,11 @@ export interface GlobalStyles {
               "id": "comp-logo",
               "type": "image",
               "name": "Logo",
-              "props": { "src": "/media/logo.svg", "alt": "Alpha Logo", "width": 140 },
+              "props": {
+                "src": "/media/logo.svg",
+                "alt": "Alpha Logo",
+                "width": 140
+              },
               "styles": {},
               "responsive": {
                 "desktop": { "visible": true },
@@ -292,7 +299,12 @@ export interface GlobalStyles {
           ],
           "styles": {
             "backgroundColor": "#ffffff",
-            "padding": { "top": "16px", "bottom": "16px", "left": "24px", "right": "24px" },
+            "padding": {
+              "top": "16px",
+              "bottom": "16px",
+              "left": "24px",
+              "right": "24px"
+            },
             "margin": {}
           },
           "responsive": {
@@ -312,7 +324,11 @@ export interface GlobalStyles {
               "type": "heading",
               "name": "Título Principal",
               "props": { "text": "Bienvenido a Nuestro Portal", "level": "h1" },
-              "styles": { "fontSize": "36px", "fontWeight": "700", "textAlign": "center" },
+              "styles": {
+                "fontSize": "36px",
+                "fontWeight": "700",
+                "textAlign": "center"
+              },
               "responsive": {
                 "desktop": { "visible": true },
                 "tablet": { "visible": true },
@@ -325,7 +341,11 @@ export interface GlobalStyles {
               "type": "paragraph",
               "name": "Subtítulo",
               "props": { "text": "Soluciones innovadoras para tu negocio" },
-              "styles": { "color": "#64748b", "textAlign": "center", "fontSize": "18px" },
+              "styles": {
+                "color": "#64748b",
+                "textAlign": "center",
+                "fontSize": "18px"
+              },
               "responsive": {
                 "desktop": { "visible": true },
                 "tablet": { "visible": true },
@@ -337,7 +357,11 @@ export interface GlobalStyles {
               "id": "comp-cta",
               "type": "button",
               "name": "CTA Principal",
-              "props": { "text": "Conocer más", "href": "/servicios", "variant": "primary" },
+              "props": {
+                "text": "Conocer más",
+                "href": "/servicios",
+                "variant": "primary"
+              },
               "styles": { "backgroundColor": "#3b82f6", "color": "#ffffff" },
               "responsive": {
                 "desktop": { "visible": true },
@@ -368,4 +392,4 @@ export interface GlobalStyles {
     "linkColor": "#3b82f6"
   }
 }
-```
+```text

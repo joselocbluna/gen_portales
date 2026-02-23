@@ -20,11 +20,11 @@ proyectos/empresas/templates, almacenamiento de medios, y generación de sitios 
 
 #### Opciones evaluadas
 
-| Opción | Pros | Contras |
-|--------|------|---------|
-| **PostgreSQL** | JSONB nativo para estructuras de componentes, maduro, extensible, excelente para relaciones complejas | Requiere más configuración que opciones managed |
-| MongoDB | Flexible para documentos JSON, esquema dinámico | Menos consistencia en relaciones, joins limitados |
-| MySQL | Popular, simple | Menos capacidades JSON que PostgreSQL, menor extensibilidad |
+| Opción         | Pros                                                                                                  | Contras                                                     |
+| -------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| **PostgreSQL** | JSONB nativo para estructuras de componentes, maduro, extensible, excelente para relaciones complejas | Requiere más configuración que opciones managed             |
+| MongoDB        | Flexible para documentos JSON, esquema dinámico                                                       | Menos consistencia en relaciones, joins limitados           |
+| MySQL          | Popular, simple                                                                                       | Menos capacidades JSON que PostgreSQL, menor extensibilidad |
 
 **Razón:** La estructura jerárquica (portal → páginas → secciones → componentes → atributos)
 se beneficia de JSONB para la definición de componentes, mientras que las relaciones entre
@@ -40,11 +40,11 @@ proyectos, empresas, usuarios y roles se benefician de un modelo relacional robu
 
 #### Opciones evaluadas
 
-| Opción | Pros | Contras |
-|--------|------|---------|
-| **Next.js (React)** | SSR + client components, App Router con layouts anidados, API routes integradas, ecosistema dnd-kit/Monaco/Vercel AI SDK, middleware para auth | Bundle size puede crecer |
-| Nuxt (Vue) | Sintaxis limpia, buena DX | dnd-kit no disponible para Vue, ecosistema de editores visuales más limitado |
-| React SPA (Vite) | Ligero, rápido en dev | Sin SSR, sin API routes, requiere backend separado desde el inicio |
+| Opción              | Pros                                                                                                                                           | Contras                                                                      |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **Next.js (React)** | SSR + client components, App Router con layouts anidados, API routes integradas, ecosistema dnd-kit/Monaco/Vercel AI SDK, middleware para auth | Bundle size puede crecer                                                     |
+| Nuxt (Vue)          | Sintaxis limpia, buena DX                                                                                                                      | dnd-kit no disponible para Vue, ecosistema de editores visuales más limitado |
+| React SPA (Vite)    | Ligero, rápido en dev                                                                                                                          | Sin SSR, sin API routes, requiere backend separado desde el inicio           |
 
 **Razón:** Next.js ofrece SSR para el dashboard (carga rápida, SEO), client components para
 el editor canvas (dnd-kit, estado complejo), API routes para el MVP, y middleware nativo para
@@ -58,12 +58,12 @@ proteger rutas por rol. El ecosistema React es el más maduro para editores visu
 
 #### Opciones evaluadas
 
-| Opción | Pros | Contras |
-|--------|------|---------|
-| **dnd-kit (custom)** | Control total del estado (JSON), integración natural con IA, React nativo, soporta listas y posicionamiento libre | Más trabajo inicial para construir el editor |
-| GrapesJS | Editor completo out-of-the-box | "Caja cerrada", difícil integrar IA profundamente, personalización limitada |
-| Craft.js | React nativo, buen control | Menos features que GrapesJS, comunidad más pequeña |
-| @hello-pangea/dnd | Simple para listas/grids | No soporta posicionamiento libre en canvas |
+| Opción               | Pros                                                                                                              | Contras                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **dnd-kit (custom)** | Control total del estado (JSON), integración natural con IA, React nativo, soporta listas y posicionamiento libre | Más trabajo inicial para construir el editor                                |
+| GrapesJS             | Editor completo out-of-the-box                                                                                    | "Caja cerrada", difícil integrar IA profundamente, personalización limitada |
+| Craft.js             | React nativo, buen control                                                                                        | Menos features que GrapesJS, comunidad más pequeña                          |
+| @hello-pangea/dnd    | Simple para listas/grids                                                                                          | No soporta posicionamiento libre en canvas                                  |
 
 **Razón:** La integración de un asistente de IA directamente en el editor requiere control total
 del estado del canvas. Con dnd-kit, el árbol de componentes es un JSON que se comparte entre
@@ -85,11 +85,11 @@ el editor visual, el agente de IA, y el motor de generación. GrapesJS sería un
 
 #### Opciones evaluadas
 
-| Opción | Pros | Contras |
-|--------|------|---------|
-| **NestJS (TypeScript)** | Mismo lenguaje que frontend, arquitectura modular, Guards RBAC nativos, Prisma ORM, WebSockets integrados, Sharp para imágenes, Astro es Node nativo | Rendimiento raw inferior a Go para generación masiva |
-| Go (Fiber/Echo) | Alto rendimiento, binarios ligeros, tipado fuerte | Lenguaje diferente al frontend, no comparte tipos, ecosistema web más limitado, Astro no es nativo |
-| Híbrido (NestJS + Go) | Lo mejor de ambos mundos | Complejidad operativa, dos lenguajes, prematuro para MVP |
+| Opción                  | Pros                                                                                                                                                 | Contras                                                                                            |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| **NestJS (TypeScript)** | Mismo lenguaje que frontend, arquitectura modular, Guards RBAC nativos, Prisma ORM, WebSockets integrados, Sharp para imágenes, Astro es Node nativo | Rendimiento raw inferior a Go para generación masiva                                               |
+| Go (Fiber/Echo)         | Alto rendimiento, binarios ligeros, tipado fuerte                                                                                                    | Lenguaje diferente al frontend, no comparte tipos, ecosistema web más limitado, Astro no es nativo |
+| Híbrido (NestJS + Go)   | Lo mejor de ambos mundos                                                                                                                             | Complejidad operativa, dos lenguajes, prematuro para MVP                                           |
 
 **Razón:** NestJS permite un stack 100% TypeScript compartiendo tipos entre frontend y backend
 vía monorepo (Turborepo + @generador/shared). La arquitectura modular mapea directamente a los
@@ -149,7 +149,7 @@ En lugar de un servicio externo como Keycloak (demasiado pesado para el inicio) 
 
 ## Arquitectura General Propuesta
 
-```
+```text
 ┌─────────────────────────────────────────────────┐
 │                   FRONTEND                       │
 │         Next.js (React) + SSR                    │
@@ -174,8 +174,7 @@ En lugar de un servicio externo como Keycloak (demasiado pesado para el inicio) 
    │ (datos)  │   │ (medios)  │  │ (caché/ │
    │          │   │           │  │ sesiones)│
    └──────────┘   └───────────┘  └─────────┘
-```
-
+```text
 ## Consecuencias
 
 - Stack 100% TypeScript permite compartir tipos entre frontend y backend

@@ -43,27 +43,26 @@
     "details": [ ... ]
   }
 }
-```
-
+```text
 ## Códigos de Error
 
-| Código | Nombre | Uso |
-|--------|--------|-----|
-| `AUTH_INVALID_CREDENTIALS` | Credenciales inválidas | Login fallido |
-| `AUTH_TOKEN_EXPIRED` | Token expirado | JWT vencido |
-| `AUTH_FORBIDDEN` | Sin permisos | Rol insuficiente para la acción |
-| `RESOURCE_NOT_FOUND` | Recurso no encontrado | ID no existe |
-| `RESOURCE_ALREADY_EXISTS` | Recurso duplicado | Slug/email duplicado |
-| `VALIDATION_ERROR` | Error de validación | Campos inválidos |
-| `COMPANY_ACCESS_DENIED` | Acceso a empresa denegado | Usuario no pertenece a la empresa |
-| `BUILD_FAILED` | Error en generación | Falló el build de Astro |
-| `MEDIA_UPLOAD_FAILED` | Error al subir archivo | Fallo en MinIO |
+| Código                     | Nombre                    | Uso                               |
+| -------------------------- | ------------------------- | --------------------------------- |
+| `AUTH_INVALID_CREDENTIALS` | Credenciales inválidas    | Login fallido                     |
+| `AUTH_TOKEN_EXPIRED`       | Token expirado            | JWT vencido                       |
+| `AUTH_FORBIDDEN`           | Sin permisos              | Rol insuficiente para la acción   |
+| `RESOURCE_NOT_FOUND`       | Recurso no encontrado     | ID no existe                      |
+| `RESOURCE_ALREADY_EXISTS`  | Recurso duplicado         | Slug/email duplicado              |
+| `VALIDATION_ERROR`         | Error de validación       | Campos inválidos                  |
+| `COMPANY_ACCESS_DENIED`    | Acceso a empresa denegado | Usuario no pertenece a la empresa |
+| `BUILD_FAILED`             | Error en generación       | Falló el build de Astro           |
+| `MEDIA_UPLOAD_FAILED`      | Error al subir archivo    | Fallo en MinIO                    |
 
 ---
 
 ## 1. AUTH — Autenticación
 
-```
+```text
 POST   /auth/login              → Iniciar sesión
 POST   /auth/register           → Registrar usuario (solo admin)
 POST   /auth/refresh            → Renovar token JWT
@@ -73,8 +72,7 @@ POST   /auth/reset-password     → Resetear contraseña con token
 GET    /auth/me                 → Obtener perfil del usuario actual
 PUT    /auth/me                 → Actualizar perfil propio
 PUT    /auth/me/password        → Cambiar contraseña propia
-```
-
+```text
 ### POST /auth/login
 
 ```json
@@ -106,11 +104,10 @@ PUT    /auth/me/password        → Cambiar contraseña propia
     }
   }
 }
-```
-
+```text
 ### GET /auth/me
 
-```
+```text
 Headers: Authorization: Bearer <accessToken>
 
 // Response 200
@@ -134,13 +131,12 @@ Headers: Authorization: Bearer <accessToken>
     "createdAt": "2026-01-15T10:00:00Z"
   }
 }
-```
-
+```text
 ---
 
 ## 2. EMPRESAS — Gestión de Empresas
 
-```
+```text
 GET    /empresas                 → Listar empresas (admin: todas, user: las suyas)
 POST   /empresas                 → Crear empresa (solo admin)
 GET    /empresas/:id             → Obtener empresa por ID
@@ -151,11 +147,10 @@ GET    /empresas/:id/usuarios    → Listar usuarios de la empresa
 POST   /empresas/:id/usuarios    → Agregar usuario a la empresa
 PUT    /empresas/:id/usuarios/:userId → Cambiar rol de usuario en empresa
 DELETE /empresas/:id/usuarios/:userId → Remover usuario de la empresa
-```
-
+```text
 ### GET /empresas
 
-```
+```text
 Query params:
   ?page=1&limit=20&search=alpha&isActive=true
 
@@ -180,8 +175,7 @@ Query params:
   ],
   "meta": { "page": 1, "limit": 20, "total": 12, "totalPages": 1 }
 }
-```
-
+```text
 ### POST /empresas
 
 ```json
@@ -197,13 +191,12 @@ Query params:
   "success": true,
   "data": { "id": "com_new123", "name": "Empresa Nueva", ... }
 }
-```
-
+```text
 ---
 
 ## 3. PROYECTOS — Gestión de Proyectos (Portales)
 
-```
+```text
 GET    /empresas/:empresaId/proyectos              → Listar proyectos de empresa
 POST   /empresas/:empresaId/proyectos              → Crear proyecto
 GET    /empresas/:empresaId/proyectos/:id           → Obtener proyecto
@@ -218,8 +211,7 @@ PUT    /empresas/:empresaId/proyectos/:id/unpublish → Despublicar proyecto
 GET    /empresas/:empresaId/proyectos/:id/usuarios  → Usuarios asignados
 POST   /empresas/:empresaId/proyectos/:id/usuarios  → Asignar usuario
 DELETE /empresas/:empresaId/proyectos/:id/usuarios/:userId → Desasignar
-```
-
+```text
 ### POST /empresas/:empresaId/proyectos
 
 ```json
@@ -245,13 +237,12 @@ DELETE /empresas/:empresaId/proyectos/:id/usuarios/:userId → Desasignar
     "createdAt": "2026-02-22T14:00:00Z"
   }
 }
-```
-
+```text
 ---
 
 ## 4. PÁGINAS — Contenido del Portal (Editor)
 
-```
+```text
 GET    /proyectos/:proyectoId/paginas              → Listar páginas del proyecto
 POST   /proyectos/:proyectoId/paginas              → Crear página
 GET    /proyectos/:proyectoId/paginas/:id           → Obtener página con contenido
@@ -263,8 +254,7 @@ POST   /proyectos/:proyectoId/paginas/:id/duplicate → Duplicar página
 GET    /proyectos/:proyectoId/paginas/:id/versions  → Historial de versiones
 GET    /proyectos/:proyectoId/paginas/:id/versions/:v → Obtener versión específica
 POST   /proyectos/:proyectoId/paginas/:id/versions/:v/restore → Restaurar versión
-```
-
+```text
 ### GET /proyectos/:proyectoId/paginas/:id
 
 ```json
@@ -299,8 +289,7 @@ POST   /proyectos/:proyectoId/paginas/:id/versions/:v/restore → Restaurar vers
     "updatedAt": "2026-02-22T16:30:00Z"
   }
 }
-```
-
+```text
 ### PUT /proyectos/:proyectoId/paginas/:id
 
 ```json
@@ -319,13 +308,12 @@ POST   /proyectos/:proyectoId/paginas/:id/versions/:v/restore → Restaurar vers
   "success": true,
   "data": { "id": "pag_ghi789", "version": 5, ... }
 }
-```
-
+```text
 ---
 
 ## 5. TEMPLATES
 
-```
+```text
 GET    /templates                          → Listar templates (globales + empresa)
 POST   /templates                          → Crear template
 GET    /templates/:id                       → Obtener template
@@ -333,11 +321,10 @@ PUT    /templates/:id                       → Actualizar template
 DELETE /templates/:id                       → Desactivar template
 POST   /templates/:id/duplicate             → Duplicar template
 GET    /templates/:id/preview               → Preview del template
-```
-
+```text
 ### GET /templates
 
-```
+```text
 Query params:
   ?scope=GLOBAL|COMPANY&category=landing&search=corporativo&page=1&limit=20
 
@@ -361,24 +348,22 @@ Query params:
   ],
   "meta": { ... }
 }
-```
-
+```text
 ---
 
 ## 6. MEDIA — Archivos y Medios
 
-```
+```text
 GET    /media                              → Listar archivos (filtro por empresa/proyecto)
 POST   /media/upload                        → Subir archivo(s)
 GET    /media/:id                           → Obtener metadata del archivo
 DELETE /media/:id                           → Eliminar archivo
 GET    /media/:id/url                       → Obtener URL firmada (temporal)
 POST   /media/upload-multiple               → Subir múltiples archivos
-```
-
+```text
 ### POST /media/upload
 
-```
+```text
 Content-Type: multipart/form-data
 
 Fields:
@@ -407,20 +392,18 @@ Fields:
     "createdAt": "2026-02-22T17:00:00Z"
   }
 }
-```
-
+```text
 ---
 
 ## 7. BUILDS — Generación de Portales
 
-```
+```text
 POST   /proyectos/:proyectoId/builds        → Iniciar generación (build Astro)
 GET    /proyectos/:proyectoId/builds         → Listar builds del proyecto
 GET    /proyectos/:proyectoId/builds/:id     → Estado/detalle de un build
 GET    /proyectos/:proyectoId/builds/:id/log → Log del build
 GET    /proyectos/:proyectoId/builds/:id/download → Descargar build (zip)
-```
-
+```text
 ### POST /proyectos/:proyectoId/builds
 
 ```json
@@ -438,12 +421,11 @@ GET    /proyectos/:proyectoId/builds/:id/download → Descargar build (zip)
     "createdAt": "2026-02-22T18:00:00Z"
   }
 }
-```
-
+```text
 El build se ejecuta de forma asíncrona. El frontend puede hacer polling
 o escuchar por WebSocket para actualizaciones de estado:
 
-```
+```text
 WebSocket: ws://localhost:4001/builds/:buildId/status
 
 Eventos:
@@ -453,19 +435,17 @@ Eventos:
   { "status": "SUCCESS", "outputUrl": "https://...", "duration": 12400 }
   // o
   { "status": "FAILED", "error": "...", "duration": 5200 }
-```
-
+```text
 ---
 
 ## 8. AI — Asistente de Inteligencia Artificial
 
-```
+```text
 POST   /ai/chat                             → Enviar mensaje al asistente (streaming)
 POST   /ai/generate-section                 → Generar sección desde descripción
 POST   /ai/suggest-content                  → Sugerir contenido para un componente
 POST   /ai/improve-styles                   → Sugerir mejoras de estilos
-```
-
+```text
 ### POST /ai/chat (Streaming via SSE)
 
 ```json
@@ -488,8 +468,7 @@ data: {"type":"thinking","content":"Analizando la estructura actual..."}
 data: {"type":"text","content":"Voy a crear una sección de testimonios con 3 tarjetas..."}
 data: {"type":"section","content":{"id":"sec-testimonials","type":"testimonials","components":[...]}}
 data: {"type":"done","message":"✓ Sección agregada al canvas"}
-```
-
+```text
 ### POST /ai/generate-section
 
 ```json
@@ -512,13 +491,12 @@ data: {"type":"done","message":"✓ Sección agregada al canvas"}
     }
   }
 }
-```
-
+```text
 ---
 
-## 9. ADMIN — Administración (solo *systemroot)
+## 9. ADMIN — Administración (solo \*systemroot)
 
-```
+```text
 GET    /admin/usuarios                     → Listar todos los usuarios del sistema
 POST   /admin/usuarios/invite              → Invitar usuario
 PUT    /admin/usuarios/:id                 → Editar usuario
@@ -532,13 +510,12 @@ DELETE /admin/roles/:id                    → Eliminar rol (si no es system)
 
 GET    /admin/audit-log                    → Log de auditoría
 GET    /admin/dashboard                    → Stats globales del sistema
-```
-
+```text
 ---
 
 ## 10. WebSocket Events — Editor en Tiempo Real
 
-```
+```text
 Namespace: /editor
 
 Conexión: ws://localhost:4001/editor?projectId=X&pageId=Y&token=JWT
@@ -561,13 +538,12 @@ Eventos Server → Client:
   user-left          → Otro usuario salió del editor
   save-confirmed     → Guardado confirmado
   error              → Error en la operación
-```
-
+```text
 ---
 
 ## Middleware y Guards
 
-```
+```text
 Todas las rutas (excepto /auth/login, /auth/register, /auth/forgot-password):
   → JwtAuthGuard (verifica token válido)
 
@@ -582,4 +558,4 @@ Rutas /admin/*:
 
 Rutas POST/PUT/DELETE:
   → AuditInterceptor (registra la acción en audit_logs)
-```
+```text

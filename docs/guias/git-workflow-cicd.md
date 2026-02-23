@@ -4,7 +4,7 @@
 
 ## Estrategia de Ramas — Trunk-Based con Feature Branches
 
-```
+```text
 main (producción)
   │
   ├── develop (integración)
@@ -19,22 +19,21 @@ main (producción)
   │     └── chore/update-deps          → Mantenimiento
   │
   └── hotfix/critical-security-fix     → Fixes urgentes directo a main
-```
-
+```text
 ### Convenciones de nombres
 
-| Tipo | Prefijo | Ejemplo |
-|------|---------|---------|
-| Funcionalidad nueva | `feature/` | `feature/auth-module` |
-| Corrección de bug | `fix/` | `fix/login-redirect` |
-| Mantenimiento | `chore/` | `chore/update-prisma` |
-| Documentación | `docs/` | `docs/api-endpoints` |
-| Refactoring | `refactor/` | `refactor/editor-state` |
-| Hotfix producción | `hotfix/` | `hotfix/critical-security` |
+| Tipo                | Prefijo     | Ejemplo                    |
+| ------------------- | ----------- | -------------------------- |
+| Funcionalidad nueva | `feature/`  | `feature/auth-module`      |
+| Corrección de bug   | `fix/`      | `fix/login-redirect`       |
+| Mantenimiento       | `chore/`    | `chore/update-prisma`      |
+| Documentación       | `docs/`     | `docs/api-endpoints`       |
+| Refactoring         | `refactor/` | `refactor/editor-state`    |
+| Hotfix producción   | `hotfix/`   | `hotfix/critical-security` |
 
 ### Flujo de trabajo
 
-```
+```text
 1. Crear branch desde develop:
    git checkout develop
    git pull
@@ -53,11 +52,10 @@ main (producción)
 
 5. develop → main: Release cuando develop está estable
    gh pr create --base main --head develop --title "Release v0.1.0"
-```
-
+```text
 ### Commits convencionales
 
-```
+```text
 Formato: <tipo>(<scope>): <descripción>
 
 Tipos:
@@ -81,8 +79,7 @@ Ejemplos:
   chore(docker): update postgres to 16.2
   test(api): add integration tests for empresas endpoints
   docs(api): update endpoint documentation for templates
-```
-
+```text
 ---
 
 ## CI/CD Pipeline — GitHub Actions
@@ -109,8 +106,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm lint          # ESLint en todo el monorepo
-      - run: pnpm type-check    # TypeScript strict
+      - run: pnpm lint # ESLint en todo el monorepo
+      - run: pnpm type-check # TypeScript strict
 
   test:
     name: Tests
@@ -122,7 +119,7 @@ jobs:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
           POSTGRES_DB: generador_test
-        ports: ['5432:5432']
+        ports: ["5432:5432"]
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -130,7 +127,7 @@ jobs:
           --health-retries 5
       redis:
         image: redis:7-alpine
-        ports: ['6379:6379']
+        ports: ["6379:6379"]
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -142,8 +139,8 @@ jobs:
       - run: pnpm --filter api prisma migrate deploy
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/generador_test
-      - run: pnpm test           # Unit tests
-      - run: pnpm test:e2e       # Integration tests (API)
+      - run: pnpm test # Unit tests
+      - run: pnpm test:e2e # Integration tests (API)
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/generador_test
           REDIS_URL: redis://localhost:6379
@@ -159,9 +156,8 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm build          # Build todo el monorepo
-```
-
+      - run: pnpm build # Build todo el monorepo
+```text
 ### Pipeline de Deploy (en merge a main)
 
 ```yaml
@@ -233,15 +229,14 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             docker exec gen_por-api npx prisma migrate deploy
-```
-
+```text
 ### Secrets necesarios en GitHub
 
-| Secret | Descripción |
-|--------|-------------|
-| `SERVER_HOST` | IP o dominio del servidor de producción |
-| `SERVER_USER` | Usuario SSH del servidor |
-| `SERVER_SSH_KEY` | Llave SSH privada para conexión |
+| Secret           | Descripción                             |
+| ---------------- | --------------------------------------- |
+| `SERVER_HOST`    | IP o dominio del servidor de producción |
+| `SERVER_USER`    | Usuario SSH del servidor                |
+| `SERVER_SSH_KEY` | Llave SSH privada para conexión         |
 
 ---
 
@@ -264,7 +259,7 @@ jobs:
 
 ## Proceso de Release
 
-```
+```text
 1. Verificar que develop está estable y CI pasa
 2. Crear PR: develop → main con título "Release vX.Y.Z"
 3. En la descripción listar cambios desde el último release
@@ -272,11 +267,10 @@ jobs:
 5. Merge → GitHub Actions despliega automáticamente
 6. Crear GitHub Release con tag vX.Y.Z
 7. Actualizar changelog
-```
-
+```text
 ## Versionado Semántico
 
-```
+```text
 vMAJOR.MINOR.PATCH
 
 MAJOR → Cambios incompatibles (breaking changes)
@@ -288,4 +282,4 @@ Ejemplo:
   v0.2.0 → Templates + Generación Astro
   v0.3.0 → Panel IA + Media management
   v1.0.0 → Primera versión estable de producción
-```
+```text

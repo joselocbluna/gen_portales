@@ -11,11 +11,11 @@ proyectos a empresas, y reutilizar templates predefinidos o personalizados.
 
 ## Usuarios y Roles
 
-| Rol | Descripción | Permisos principales |
-|-----|-------------|---------------------|
+| Rol           | Descripción                                               | Permisos principales                                        |
+| ------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
 | Desarrollador | Crea y configura componentes, templates y lógica avanzada | Acceso completo al editor, código, templates, configuración |
-| Editor | Diseña y edita contenido de los portales | Editor visual, gestión de contenido, preview |
-| (Por definir) | Roles adicionales según evolución del proyecto | Por determinar |
+| Editor        | Diseña y edita contenido de los portales                  | Editor visual, gestión de contenido, preview                |
+| (Por definir) | Roles adicionales según evolución del proyecto            | Por determinar                                              |
 
 Sistema de permisos: RBAC (Role-Based Access Control)
 
