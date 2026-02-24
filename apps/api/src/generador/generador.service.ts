@@ -20,7 +20,8 @@ export class GeneradorService {
         // --- FASE 1.5: Sincronización con Base de Datos ---
         try {
             this.logger.log(`Sincronizando estado del portal ${portalData.id} a la Base de Datos...`);
-            for (const page of portalData.pages) {
+            for (const p of portalData.pages) {
+                const page = p as any; // Evadir conflicto de Typescript temporal: Page de UI vs Page de Prisma
                 // En PostgreSQL un 'Page' pertenece a un 'Project'
                 await this.prisma.page.upsert({
                     where: { id: page.id },
@@ -28,14 +29,14 @@ export class GeneradorService {
                         id: page.id,
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Nueva Página',
-                        slug: page.slug === '/' ? 'home' : page.slug.replace(/^\/+/, ''),
+                        slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
                         content: page.sections as any, // Guardamos el arbol JSON
                         projectId: portalData.id // Asumimos portalData.id == projectId
                     },
                     update: {
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Página Actualizada',
-                        slug: page.slug === '/' ? 'home' : page.slug.replace(/^\/+/, ''),
+                        slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
                         content: page.sections as any,
                     }
                 });
