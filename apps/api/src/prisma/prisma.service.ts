@@ -6,8 +6,9 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
     async onModuleInit() {
         try {
             await this.$connect();
+            console.log('✅ Prisma conectado correctamente a:', process.env.DATABASE_URL?.split('@')[1] || process.env.DATABASE_URL);
         } catch (e) {
-            console.warn('WARNING: Prisma falló al conectar. El API seguirá funcionando pero las rutas de BD fallarán.');
+            console.error('❌ ERROR Prisma: Falla al conectar con base de datos.', e);
         }
     }
 

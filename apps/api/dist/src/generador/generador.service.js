@@ -1,27 +1,67 @@
-import { Injectable, Logger } from '@nestjs/common';
-import { PortalState, Page, Section, Component } from '@generador/shared';
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import { exec } from 'child_process';
-import { promisify } from 'util';
-import { PrismaService } from '../prisma/prisma.service';
-
-const execAsync = promisify(exec);
-
-@Injectable()
-export class GeneradorService {
-    private readonly logger = new Logger(GeneradorService.name);
-
-    constructor(private readonly prisma: PrismaService) { }
-
-    async generateAstroProject(portalData: PortalState): Promise<{ message: string; downloadUrl?: string }> {
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var GeneradorService_1;
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.GeneradorService = void 0;
+const common_1 = require("@nestjs/common");
+const fs = __importStar(require("fs/promises"));
+const path = __importStar(require("path"));
+const child_process_1 = require("child_process");
+const util_1 = require("util");
+const prisma_service_1 = require("../prisma/prisma.service");
+const execAsync = (0, util_1.promisify)(child_process_1.exec);
+let GeneradorService = GeneradorService_1 = class GeneradorService {
+    prisma;
+    logger = new common_1.Logger(GeneradorService_1.name);
+    constructor(prisma) {
+        this.prisma = prisma;
+    }
+    async generateAstroProject(portalData) {
         this.logger.log(`Generando proyecto Astro para portal: ${portalData.id}`);
-
-        // --- FASE 1.5: Sincronización con Base de Datos ---
         try {
             this.logger.log(`Sincronizando estado del portal ${portalData.id} a la Base de Datos...`);
             for (const page of portalData.pages) {
-                // En PostgreSQL un 'Page' pertenece a un 'Project'
                 await this.prisma.page.upsert({
                     where: { id: page.id },
                     create: {
@@ -29,62 +69,49 @@ export class GeneradorService {
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Nueva Página',
                         slug: page.slug === '/' ? 'home' : page.slug.replace(/^\/+/, ''),
-                        content: page.sections as any, // Guardamos el arbol JSON
-                        projectId: portalData.id // Asumimos portalData.id == projectId
+                        content: page.sections,
+                        projectId: portalData.id
                     },
                     update: {
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Página Actualizada',
                         slug: page.slug === '/' ? 'home' : page.slug.replace(/^\/+/, ''),
-                        content: page.sections as any,
+                        content: page.sections,
                     }
                 });
             }
             this.logger.log(`✅ ${portalData.pages.length} página(s) sincronizada(s) con éxito en la Base de Datos.`);
-        } catch (dbError) {
-            this.logger.error('Error al sincronizar con la base de datos:', dbError);
-            // Podríamos abortar aquí, pero continuaremos con la generación física como degradación amable
         }
-
-        // Directorio de salida temporal
+        catch (dbError) {
+            this.logger.error('Error al sincronizar con la base de datos:', dbError);
+        }
         const timestamp = Date.now();
         const outputDir = path.join(process.cwd(), 'temp', `astro-project-${timestamp}`);
-
         try {
-            // 1. Crear directorios
             await fs.mkdir(path.join(outputDir, 'src', 'pages'), { recursive: true });
-
-            // 2. Escribir archivos base de configuración de Astro
             await this.writeBaseFiles(outputDir);
-
-            // 3. Escribir cada página del portal
             for (const page of portalData.pages) {
                 await this.generatePage(outputDir, page, portalData);
             }
-
             this.logger.log(`Archivos Astro generados con éxito en la ruta temporal: ${outputDir}`);
-
             this.logger.log(`Instalando dependencias de Astro en: ${outputDir}... (ESTO PUEDE TARDAR)`);
             await execAsync('npm install', { cwd: outputDir });
-
             this.logger.log(`Construyendo sitio Astro...`);
             await execAsync('npm run build', { cwd: outputDir });
-
             this.logger.log(`Sitio estático generado exitosamente en: ${path.join(outputDir, 'dist')}`);
-
             return {
                 message: 'Portal generado exitosamente.',
                 path: path.join(outputDir, 'dist')
-            } as any; // Cast a Any porque el controller consume más de lo que marca la Interface en Promise temporalmente
-        } catch (error) {
+            };
+        }
+        catch (error) {
             this.logger.error(`Error durante la generación de Astro: ${error}`);
             return {
                 message: `Error al generar el portal: ${String(error)}`
-            } as any;
+            };
         }
     }
-
-    private async writeBaseFiles(baseDir: string) {
+    async writeBaseFiles(baseDir) {
         const packageJson = {
             name: "gen-portal-output",
             type: "module",
@@ -99,20 +126,16 @@ export class GeneradorService {
                 astro: "^4.0.0"
             }
         };
-
         const astroConfig = `
 import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({});
 `;
-
         await fs.writeFile(path.join(baseDir, 'package.json'), JSON.stringify(packageJson, null, 2));
         await fs.writeFile(path.join(baseDir, 'astro.config.mjs'), astroConfig.trim());
     }
-
-    private async generatePage(baseDir: string, page: Page, portalState: PortalState) {
-        // En Astro todo lo que no sea script va en el cuerpo, usaremos layout HTML estándar por simplicidad base
+    async generatePage(baseDir, page, portalState) {
         let htmlContent = `<html lang="es">
 <head>
   <meta charset="utf-8" />
@@ -133,36 +156,27 @@ export default defineConfig({});
 <body>
   <div class="container">
 `;
-
-        // Render sections recursivamente
         for (const section of page.sections) {
             htmlContent += this.parseSection(section);
         }
-
         htmlContent += `  </div>\n</body>\n</html>`;
-
         const fileContent = `---
 // Archivo autogenerado para Astro (Motor de Gen Portales)
 // Aquí podríamos importar componentes interactivos luego
 ---
 ${htmlContent}
 `;
-
         const pageSlug = page.slug === '/' ? 'index' : page.slug.replace(/^\/+/, '');
         const fileName = pageSlug || 'index';
-
         await fs.writeFile(path.join(baseDir, 'src', 'pages', `${fileName}.astro`), fileContent);
     }
-
-    private parseSection(section: Section): string {
+    parseSection(section) {
         let colsClass = 'grid-cols-1';
         if (section.columns && section.columns > 1 && section.columns <= 4) {
             colsClass = `grid-cols-${section.columns}`;
         }
-
         let sectionHtml = `    <section class="section" id="${section.id}">\n`;
         sectionHtml += `      <div class="grid ${colsClass}">\n`;
-
         const numCols = section.columns || 1;
         for (let i = 0; i < numCols; i++) {
             const columnComponents = section.components.filter(c => (c.column === undefined ? 0 : c.column) === i);
@@ -172,12 +186,10 @@ ${htmlContent}
             }
             sectionHtml += `        </div>\n`;
         }
-
         sectionHtml += `      </div>\n    </section>\n`;
         return sectionHtml;
     }
-
-    private parseComponent(comp: Component): string {
+    parseComponent(comp) {
         switch (comp.type) {
             case 'heading':
                 return `          <h2>${comp.props.text || 'Sin texto'}</h2>\n`;
@@ -191,4 +203,10 @@ ${htmlContent}
                 return `          <!-- Tipo base no reconocido en el parser: ${comp.type} -->\n`;
         }
     }
-}
+};
+exports.GeneradorService = GeneradorService;
+exports.GeneradorService = GeneradorService = GeneradorService_1 = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+], GeneradorService);
+//# sourceMappingURL=generador.service.js.map
