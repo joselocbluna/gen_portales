@@ -3,16 +3,19 @@
 import React from 'react';
 import { useCanvasStore } from '../../store/canvasStore';
 import { useDroppable } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { DroppableSection } from './DroppableSection';
 
 export const Canvas = () => {
     const portal = useCanvasStore((state) => state.portal);
     const activePageId = useCanvasStore((state) => state.activePageId);
     const selectComponent = useCanvasStore((state) => state.selectComponent);
-    const selectedComponentId = useCanvasStore((state) => state.selectedComponentId);
 
     const { setNodeRef, isOver } = useDroppable({
         id: 'canvas-droppable-area',
     });
+
+    const activePageSections = portal?.pages.find(p => p.id === activePageId)?.sections || [];
 
     return (
         <div
@@ -26,35 +29,23 @@ export const Canvas = () => {
                     <p className="text-sm">Arrastra componentes desde el panel izquierdo para comenzar a diseñar.</p>
                 </div>
             ) : (
-                <div className="space-y-4">
-                    {portal.pages.find(p => p.id === activePageId)?.sections.map(section => (
-                        <div key={section.id} className="border border-slate-300 p-4 min-h-[100px] rounded-md bg-slate-50 relative">
-                            <h4 className="absolute -top-3 left-4 bg-white px-2 py-0.5 border border-slate-200 text-xs text-slate-400 rounded-md font-medium">{section.name}</h4>
-                            <div className="space-y-2 mt-2">
-                                {section.components.map(comp => (
-                                    <div
-                                        key={comp.id}
-                                        className={`p-3 bg-white shadow-sm border rounded text-sm cursor-pointer transition-colors ${selectedComponentId === comp.id ? 'border-blue-500 ring-1 ring-blue-500' : 'border-slate-200 hover:border-blue-300'}`}
-                                        onClick={(e) => { e.stopPropagation(); selectComponent(comp.id); }}
-                                    >
-                                        <strong className="uppercase text-xs text-slate-500 block mb-1">{comp.type}</strong>
-                                        <div className="text-slate-800">{comp.props.text || comp.name}</div>
-                                    </div>
-                                ))}
-                                {section.components.length === 0 && (
-                                    <div className="text-slate-400 text-xs italic p-2 rounded bg-slate-100/50">Sección vacía</div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                <SortableContext
+                    items={activePageSections.map(s => s.id)}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <div className="space-y-4 min-h-[500px]">
+                        {activePageSections.map(section => (
+                            <DroppableSection key={section.id} section={section} />
+                        ))}
 
-                    {portal.pages.find(p => p.id === activePageId)?.sections.length === 0 && (
-                        <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 py-32 border-2 border-dashed border-slate-300 rounded-lg pointer-events-none">
-                            <p className="text-lg font-medium mb-2">Suelta componentes aquí</p>
-                            <p className="text-sm">Se creará una sección automáticamente al soltar tu primer elemento.</p>
-                        </div>
-                    )}
-                </div>
+                        {activePageSections.length === 0 && (
+                            <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 py-32 border-2 border-dashed border-slate-300 rounded-lg pointer-events-none">
+                                <p className="text-lg font-medium mb-2">Suelta Estructuras aquí</p>
+                                <p className="text-sm">Arrastra una Sección o Columnas desde el panel izquierdo.</p>
+                            </div>
+                        )}
+                    </div>
+                </SortableContext>
             )}
         </div>
     );

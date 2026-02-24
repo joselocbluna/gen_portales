@@ -8,12 +8,14 @@ import { useCanvasStore } from '../../store/canvasStore';
 interface DraggableItemProps {
     id: string;
     label: string;
+    dragType: 'structural' | 'content';
+    componentType: string;
 }
 
-const DraggableItem = ({ id, label }: DraggableItemProps) => {
-    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+const DraggableItem = ({ id, label, dragType, componentType }: DraggableItemProps) => {
+    const { attributes, listeners, setNodeRef } = useDraggable({
         id,
-        data: { type: id }
+        data: { dragType, componentType }
     });
 
     // NOTA: Ignoramos `transform` aquí para que el elemento original de la barra lateral NO SE MUEVA
@@ -75,18 +77,18 @@ export const SidebarLeft = () => {
                 <div>
                     <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Estructura</h3>
                     <div className="grid grid-cols-2 gap-2">
-                        <DraggableItem id="drag-section" label="Sección" />
-                        <DraggableItem id="drag-columns" label="Columnas" />
+                        <DraggableItem id="drag-section" label="Sección" dragType="structural" componentType="section" />
+                        <DraggableItem id="drag-columns" label="Columnas" dragType="structural" componentType="columns" />
                     </div>
                 </div>
 
                 <div>
                     <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Básicos</h3>
                     <div className="grid grid-cols-2 gap-2">
-                        <DraggableItem id="drag-title" label="Título" />
-                        <DraggableItem id="drag-text" label="Texto" />
-                        <DraggableItem id="drag-button" label="Botón" />
-                        <DraggableItem id="drag-image" label="Imagen" />
+                        <DraggableItem id="drag-title" label="Título" dragType="content" componentType="heading" />
+                        <DraggableItem id="drag-text" label="Texto" dragType="content" componentType="paragraph" />
+                        <DraggableItem id="drag-button" label="Botón" dragType="content" componentType="button" />
+                        <DraggableItem id="drag-image" label="Imagen" dragType="content" componentType="image" />
                     </div>
                 </div>
             </div>

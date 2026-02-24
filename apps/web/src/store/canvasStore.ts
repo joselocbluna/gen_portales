@@ -11,10 +11,14 @@ interface CanvasStoreState {
     initPortal: (portal: PortalState) => void;
     setActivePage: (pageId: string) => void;
     selectComponent: (componentId: string | null) => void;
-    addSidebarComponentToCanvas: (componentType: string) => void;
+
+    // Drag helpers
+    addSectionFromDrag: (sectionType: string) => void;
+    addComponentFromDrag: (sectionId: string, componentType: string, columnIndex?: number) => void;
 
     // Modifiers
     updateComponentProps: (componentId: string, props: Record<string, any>) => void;
+    updateSectionProps: (sectionId: string, props: Partial<Section>) => void;
     addSection: (pageId: string, section: Section) => void;
     addComponentToSection: (sectionId: string, component: Component) => void;
     reorderSections: (pageId: string, oldIndex: number, newIndex: number) => void;
@@ -65,25 +69,30 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
 
     selectComponent: (componentId) => set({ selectedComponentId: componentId }),
 
-    addSidebarComponentToCanvas: (componentType) => set(produce((state: CanvasStoreState) => {
+    addSectionFromDrag: (sectionType: string) => set(produce((state: CanvasStoreState) => {
         if (!state.portal || !state.activePageId) return;
         const page = state.portal.pages.find(p => p.id === state.activePageId);
         if (!page) return;
 
-        // Asegurarnos de que haya al menos una sección constructiva
-        if (page.sections.length === 0) {
-            page.sections.push({
-                id: `section-${Date.now()}`,
-                name: "Sección Principal",
-                type: "content",
-                columns: 1,
-                components: [],
-                styles: { padding: {}, margin: {} },
-                responsive: { desktop: { visible: true }, tablet: { visible: true }, mobile: { visible: true } }
-            });
-        }
+        page.sections.push({
+            id: `section-${Date.now()}`,
+            name: sectionType === 'columns' ? "Columnas" : "Nueva Sección",
+            type: sectionType as any,
+            columns: sectionType === 'columns' ? 2 : 1,
+            components: [],
+            styles: { padding: {}, margin: {} },
+            responsive: { desktop: { visible: true }, tablet: { visible: true }, mobile: { visible: true } }
+        });
+    })),
 
-        const targetSection = page.sections[0]; // Sembrar en la primera sección
+    addComponentFromDrag: (sectionId: string, componentType: string, columnIndex: number = 0) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal || !state.activePageId) return;
+        const page = state.portal.pages.find(p => p.id === state.activePageId);
+        if (!page) return;
+
+        const section = page.sections.find(s => s.id === sectionId);
+        if (!section) return;
+
         const newComponent: Component = {
             id: `comp-${Date.now()}`,
             type: componentType as any,
@@ -91,9 +100,10 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
             props: { text: "Haz clic para editar" },
             styles: {},
             responsive: { desktop: { visible: true }, tablet: { visible: true }, mobile: { visible: true } },
-            order: targetSection.components.length
+            order: section.components.length,
+            column: columnIndex
         };
-        targetSection.components.push(newComponent);
+        section.components.push(newComponent);
     })),
 
     updateComponentProps: (componentId, props) => set(produce((state: CanvasStoreState) => {
@@ -136,4 +146,17 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
             page.sections.splice(newIndex, 0, movedSection);
         }
     })),
+
+    updateSectionProps: (sectionId, props) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        state.portal.pages.forEach(page => {
+            const sectionIndex = page.sections.findIndex(s => s.id === sectionId);
+            if (sectionIndex !== -1) {
+                // Hacemos merge de las props antiguas con las entrantes (ej: { columns: 3 })
+                Object.assign(page.sections[sectionIndex], props);
+            }
+        });
+    })),
 }));
+
+

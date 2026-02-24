@@ -9,11 +9,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GeneradorModule = void 0;
 const common_1 = require("@nestjs/common");
 const generador_service_1 = require("./generador.service");
+const generador_controller_1 = require("./generador.controller");
 let GeneradorModule = class GeneradorModule {
 };
 exports.GeneradorModule = GeneradorModule;
 exports.GeneradorModule = GeneradorModule = __decorate([
     (0, common_1.Module)({
+        controllers: [generador_controller_1.GeneradorController],
         providers: [generador_service_1.GeneradorService]
     })
 ], GeneradorModule);
