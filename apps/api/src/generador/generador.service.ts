@@ -112,13 +112,13 @@ export default defineConfig({});
         await fs.writeFile(path.join(baseDir, 'astro.config.mjs'), astroConfig.trim());
     }
 
-    private async generatePage(baseDir: string, page: Page, portalState: PortalState) {
+    private async generatePage(baseDir: string, page: any, portalData: PortalState) {
         // En Astro todo lo que no sea script va en el cuerpo, usaremos layout HTML estándar por simplicidad base
         let htmlContent = `<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
-  <title>${page.title} - ${portalState.name}</title>
+  <title>${page.title} - ${portalData.name}</title>
   <style>
     body { font-family: system-ui, sans-serif; margin: 0; padding: 0; background: #fafafa; color: #333; }
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
@@ -149,8 +149,8 @@ export default defineConfig({});
 ${htmlContent}
 `;
 
-        const pageSlug = page.slug === '/' ? 'index' : page.slug.replace(/^\/+/, '');
-        const fileName = pageSlug || 'index';
+        const pagePath = page.path === '/' ? 'index' : (page.path || '').replace(/^\/+/, '');
+        const fileName = pagePath || 'index';
 
         await fs.writeFile(path.join(baseDir, 'src', 'pages', `${fileName}.astro`), fileContent);
     }
