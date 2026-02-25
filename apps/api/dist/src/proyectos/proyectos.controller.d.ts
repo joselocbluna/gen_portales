@@ -4,8 +4,8 @@ export declare class ProyectosController {
     constructor(proyectosService: ProyectosService);
     findAll(): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;
@@ -17,8 +17,8 @@ export declare class ProyectosController {
     }[]>;
     findOne(id: string): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;
@@ -34,8 +34,8 @@ export declare class ProyectosController {
         companyId: string;
     }): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;

@@ -4,8 +4,8 @@ export declare class EmpresasController {
     constructor(empresasService: EmpresasService);
     findAll(): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         logo: string | null;
         description: string | null;
         isRoot: boolean;
@@ -16,8 +16,8 @@ export declare class EmpresasController {
     }[]>;
     findOne(id: string): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         logo: string | null;
         description: string | null;
         isRoot: boolean;
@@ -31,8 +31,8 @@ export declare class EmpresasController {
         slug: string;
     }): Promise<{
         id: string;
-        slug: string;
         name: string;
+        slug: string;
         logo: string | null;
         description: string | null;
         isRoot: boolean;
