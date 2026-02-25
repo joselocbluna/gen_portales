@@ -134,7 +134,11 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
             'drag-button': 'Botón',
             'drag-image': 'Imagen',
             'drag-video': 'Video',
-            'drag-html': 'Bloque HTML'
+            'drag-html': 'Bloque HTML',
+            'drag-navigation': 'Menú (Nav)',
+            'drag-footer': 'Pie de Pág. (Footer)',
+            'drag-gallery': 'Galería de Imágenes',
+            'drag-form': 'Formulario de Contacto'
         };
         return map[id] || id;
     };

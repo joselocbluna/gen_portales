@@ -79,6 +79,7 @@ export const SidebarLeft = () => {
                     <div className="grid grid-cols-2 gap-2">
                         <DraggableItem id="drag-section" label="Sección" dragType="structural" componentType="section" />
                         <DraggableItem id="drag-columns" label="Columnas" dragType="structural" componentType="columns" />
+                        <DraggableItem id="drag-footer" label="Pie de Pág." dragType="structural" componentType="footer" />
                     </div>
                 </div>
 
@@ -91,6 +92,9 @@ export const SidebarLeft = () => {
                         <DraggableItem id="drag-image" label="Imagen" dragType="content" componentType="image" />
                         <DraggableItem id="drag-video" label="Video" dragType="content" componentType="video" />
                         <DraggableItem id="drag-html" label="HTML" dragType="content" componentType="html" />
+                        <DraggableItem id="drag-navigation" label="Menú (Nav)" dragType="content" componentType="navigation" />
+                        <DraggableItem id="drag-gallery" label="Galería" dragType="content" componentType="gallery" />
+                        <DraggableItem id="drag-form" label="Formulario" dragType="content" componentType="form" />
                     </div>
                 </div>
             </div>

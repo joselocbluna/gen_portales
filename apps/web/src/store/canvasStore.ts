@@ -18,10 +18,17 @@ interface CanvasStoreState {
 
     // Modifiers
     updateComponentProps: (componentId: string, props: Record<string, any>) => void;
+    updateComponentStyles: (componentId: string, styles: Record<string, any>) => void;
     updateSectionProps: (sectionId: string, props: Partial<Section>) => void;
+    updateSectionStyles: (sectionId: string, styles: Partial<Section["styles"]>) => void;
     addSection: (pageId: string, section: Section) => void;
     addComponentToSection: (sectionId: string, component: Component) => void;
     reorderSections: (pageId: string, oldIndex: number, newIndex: number) => void;
+
+    updatePageProps: (pageId: string, props: Partial<Page>) => void;
+
+    updateGlobalStyles: (styles: Partial<PortalState["globalStyles"]>) => void;
+    updateColorPalette: (palette: Partial<PortalState["settings"]["colorPalette"]>) => void;
 }
 
 const dummyPortal: PortalState = {
@@ -76,11 +83,11 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
 
         page.sections.push({
             id: `section-${Date.now()}`,
-            name: sectionType === 'columns' ? "Columnas" : "Nueva Sección",
+            name: sectionType === 'columns' ? "Columnas" : sectionType === 'footer' ? "Pie de Página" : "Nueva Sección",
             type: sectionType as any,
-            columns: sectionType === 'columns' ? 2 : 1,
+            columns: sectionType === 'columns' ? 2 : sectionType === 'footer' ? 3 : 1,
             components: [],
-            styles: { padding: {}, margin: {} },
+            styles: sectionType === 'footer' ? { padding: { top: '3rem', bottom: '3rem' }, margin: {}, backgroundColor: '#1e293b' } : { padding: {}, margin: {} },
             responsive: { desktop: { visible: true }, tablet: { visible: true }, mobile: { visible: true } }
         });
     })),
@@ -96,6 +103,10 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
         let initialProps = { text: "Haz clic para editar" } as Record<string, any>;
         if (componentType === 'video') initialProps = { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' };
         if (componentType === 'html') initialProps = { html: '<div class="p-4 bg-gray-100 rounded text-center">Custom HTML</div>' };
+        if (componentType === 'navigation') initialProps = { links: 'Inicio,/\nNosotros,/nosotros\nContacto,/contacto' };
+        if (componentType === 'button') initialProps = { text: 'Haz clic aquí', actionType: 'none', actionTarget: '' };
+        if (componentType === 'gallery') initialProps = { images: 'https://placehold.co/400x300?text=Img1,https://placehold.co/400x300?text=Img2,https://placehold.co/400x300?text=Img3', columns: 3 };
+        if (componentType === 'form') initialProps = { buttonText: 'Enviar', emailTo: 'contacto@empresa.com' };
 
         const newComponent: Component = {
             id: `comp-${Date.now()}`,
@@ -169,6 +180,38 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
             if (sectionIndex !== -1) {
                 // Hacemos merge de las props antiguas con las entrantes (ej: { columns: 3 })
                 Object.assign(page.sections[sectionIndex], props);
+            }
+        });
+    })),
+
+    updateSectionStyles: (sectionId, styles) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        state.portal.pages.forEach(page => {
+            const section = page.sections.find(s => s.id === sectionId);
+            if (section) {
+                section.styles = { ...section.styles, ...styles };
+            }
+        });
+    })),
+
+    updatePageProps: (pageId, props) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        const pageIndex = state.portal.pages.findIndex(p => p.id === pageId);
+        if (pageIndex !== -1) {
+            Object.assign(state.portal.pages[pageIndex], props);
+        }
+    })),
+
+    updateGlobalStyles: (styles) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        state.portal.globalStyles = { ...state.portal.globalStyles, ...styles };
+    })),
+
+    updateColorPalette: (palette) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        Object.entries(palette).forEach(([key, value]) => {
+            if (value !== undefined) {
+                state.portal!.settings.colorPalette[key] = value;
             }
         });
     })),

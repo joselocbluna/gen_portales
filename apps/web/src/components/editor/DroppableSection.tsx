@@ -13,16 +13,42 @@ interface DroppableColumnProps {
 }
 
 const renderComponentPreview = (comp: PortalComponent) => {
+    const styleObj = {
+        textAlign: comp.styles?.textAlign as any,
+        color: comp.styles?.color,
+        fontSize: comp.styles?.fontSize,
+    };
+
     switch (comp.type) {
         case 'heading':
-            return <h2 className="text-2xl font-bold text-slate-800">{comp.props.text || 'Sin texto'}</h2>;
+            return <h2 className="text-2xl font-bold" style={styleObj}>{comp.props.text || 'Sin texto'}</h2>;
         case 'paragraph':
-            return <p className="text-base text-slate-600 leading-relaxed">{comp.props.text || 'Sin texto'}</p>;
+            return <p className="text-base leading-relaxed" style={styleObj}>{comp.props.text || 'Sin texto'}</p>;
         case 'button':
             return (
-                <button className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow-sm pointer-events-none">
-                    {comp.props.text || 'Botón'}
-                </button>
+                <div style={{ textAlign: comp.styles?.textAlign as any || 'left' }} className="w-full">
+                    <button className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow-sm pointer-events-none relative" style={{ fontSize: comp.styles?.fontSize, backgroundColor: comp.styles?.backgroundColor || '#2563eb', color: comp.styles?.color || '#ffffff' }}>
+                        {comp.props.text || 'Botón'}
+                        {comp.props.actionType && comp.props.actionType !== 'none' && (
+                            <span className="absolute -top-2 -right-2 bg-slate-800 text-white text-[9px] px-1.5 py-0.5 rounded-full z-10">
+                                {comp.props.actionType === 'link' ? '🔗' : '⚡️'}
+                            </span>
+                        )}
+                    </button>
+                </div>
+            );
+        case 'navigation':
+            const links = comp.props.links ? comp.props.links.split('\n').map((l: string) => l.split(',')) : [];
+            return (
+                <nav className="flex flex-wrap gap-4 items-center justify-between w-full" style={styleObj}>
+                    <div className="flex gap-4">
+                        {links.map(([text, url]: string[], idx: number) => (
+                            <a key={idx} href="#" onClick={e => e.preventDefault()} className="hover:underline font-medium">
+                                {text || 'Link'}
+                            </a>
+                        ))}
+                    </div>
+                </nav>
             );
         case 'image':
             return (
@@ -48,6 +74,28 @@ const renderComponentPreview = (comp: PortalComponent) => {
                     className="w-full pointer-events-none"
                     dangerouslySetInnerHTML={{ __html: comp.props?.html || '<div class="p-4 bg-slate-50 text-center text-slate-500 rounded border border-dashed border-slate-300">Bloque HTML (Vacío)</div>' }}
                 />
+            );
+        case 'gallery':
+            const galleryCols = comp.props.columns || 3;
+            const images = comp.props.images ? comp.props.images.split(',') : [];
+            return (
+                <div className={`grid gap-2 grid-cols-${galleryCols} pointer-events-none`}>
+                    {images.map((img: string, i: number) => (
+                        <div key={i} className="aspect-square bg-slate-100 rounded overflow-hidden">
+                            <img src={img.trim()} alt={`Gallery ${i}`} className="w-full h-full object-cover" />
+                        </div>
+                    ))}
+                </div>
+            );
+        case 'form':
+            return (
+                <div className="flex flex-col gap-3 p-4 border border-slate-200 rounded-lg bg-white pointer-events-none shadow-sm">
+                    <div className="font-semibold text-slate-700 text-sm mb-2">Formulario de Contacto</div>
+                    <input type="text" placeholder="Nombre completo" className="w-full border p-2 rounded text-sm bg-slate-50" readOnly />
+                    <input type="email" placeholder="Correo electrónico" className="w-full border p-2 rounded text-sm bg-slate-50" readOnly />
+                    <textarea placeholder="Mensaje..." className="w-full border p-2 rounded text-sm bg-slate-50 min-h-[80px]" readOnly />
+                    <button className="bg-blue-600 text-white px-4 py-2 rounded text-sm mt-2">{comp.props.buttonText || 'Enviar'}</button>
+                </div>
             );
         default:
             return <div className="text-slate-800 leading-tight truncate">{comp.props.text || comp.name}</div>;
@@ -76,7 +124,8 @@ const DroppableColumn = ({ sectionId, columnIndex, components }: DroppableColumn
                 components.map(comp => (
                     <div
                         key={comp.id}
-                        className={`relative group bg-white rounded-md cursor-pointer transition-all ${selectedComponentId === comp.id ? 'ring-2 ring-blue-500 shadow-md' : 'ring-1 ring-slate-200 hover:ring-blue-300 hover:shadow-sm'
+                        style={{ backgroundColor: comp.styles?.backgroundColor || '#ffffff' }}
+                        className={`relative group rounded-md cursor-pointer transition-all ${selectedComponentId === comp.id ? 'ring-2 ring-blue-500 shadow-md' : 'ring-1 ring-slate-200 hover:ring-blue-300 hover:shadow-sm'
                             }`}
                         onClick={(e) => { e.stopPropagation(); selectComponent(comp.id); }}
                     >
@@ -131,11 +180,19 @@ export const DroppableSection = ({ section }: DroppableSectionProps) => {
     const gridColsClass = gridColsMap[section.columns] || 'grid-cols-1';
 
     // Generar estilos CSS de transformación (translate) requeridos por el dnd-kit
-    const style = {
+    const style: React.CSSProperties = {
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         transition,
         opacity: isDragging ? 0.4 : 1,
         zIndex: isDragging ? 50 : 1,
+        backgroundColor: section.styles?.backgroundColor || 'transparent',
+        backgroundImage: section.styles?.backgroundImage ? `url(${section.styles.backgroundImage})` : undefined,
+        backgroundSize: section.styles?.backgroundImage ? 'cover' : undefined,
+        backgroundPosition: section.styles?.backgroundImage ? 'center' : undefined,
+        paddingTop: section.styles?.padding?.top || '1rem',
+        paddingBottom: section.styles?.padding?.bottom || '1rem',
+        marginTop: section.styles?.margin?.top || '0',
+        marginBottom: section.styles?.margin?.bottom || '0',
     };
 
     return (

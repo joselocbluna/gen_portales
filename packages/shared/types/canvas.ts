@@ -143,7 +143,8 @@ export type ComponentType =
     | "embed"
     | "html"
     // Custom
-    | "custom";
+    | "custom"
+    | "gallery";
 
 export interface EventConfig {
     type: "click" | "hover" | "submit" | "custom";

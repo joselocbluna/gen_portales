@@ -12,4 +12,5 @@ export declare class GeneradorService {
     private generatePage;
     private parseSection;
     private parseComponent;
+    private buildStyleString;
 }

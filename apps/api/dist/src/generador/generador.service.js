@@ -137,30 +137,59 @@ export default defineConfig({});
         await fs.writeFile(path.join(baseDir, 'astro.config.mjs'), astroConfig.trim());
     }
     async generatePage(baseDir, page, portalData) {
+        const bgBody = portalData.globalStyles?.bodyBackground || '#ffffff';
+        const colorBody = portalData.settings?.colorPalette?.text || '#333333';
+        let layoutClass = 'container';
+        let sidebarHtml = '';
+        if (page.layout === 'fullwidth') {
+            layoutClass = 'fullwidth';
+        }
+        else if (page.layout === 'sidebar') {
+            layoutClass = 'with-sidebar';
+            sidebarHtml = `
+      <aside class="sidebar">
+        <h3>Menú</h3>
+        <ul>
+          <li><a href="#">Opción 1</a></li>
+          <li><a href="#">Opción 2</a></li>
+          <li><a href="#">Opción 3</a></li>
+        </ul>
+      </aside>`;
+        }
         let htmlContent = `<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width" />
   <title>${page.title} - ${portalData.name}</title>
   <style>
-    body { font-family: system-ui, sans-serif; margin: 0; padding: 0; background: #fafafa; color: #333; }
+    body { font-family: system-ui, sans-serif; margin: 0; padding: 0; background: ${bgBody}; color: ${colorBody}; }
     .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
-    .grid { display: grid; gap: 1rem; w-full; margin-top: 1rem; }
+    .fullwidth { width: 100%; padding: 0; }
+    .with-sidebar { display: grid; grid-template-columns: 250px 1fr; max-width: 1200px; margin: 0 auto; min-height: 100vh; }
+    .sidebar { background: #f8fafc; padding: 2rem; border-right: 1px solid #e2e8f0; }
+    .sidebar ul { list-style: none; padding: 0; }
+    .sidebar li { margin-bottom: 0.5rem; }
+    .sidebar a { color: #334155; text-decoration: none; }
+    .main-content { padding: 2rem; width: 100%; box-sizing: border-box; }
+    .grid { display: grid; gap: 1rem; width: 100%; margin-top: 1rem; }
     .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
     .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
     .section { margin-bottom: 2rem; padding: 1rem; border: 1px solid #eaeaea; border-radius: 6px; background: white; }
     .column { display: flex; flex-direction: column; gap: 1rem; min-height: 50px; }
+    .form-control { width: 100%; padding: 0.5rem; margin-bottom: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="${layoutClass}">
+${sidebarHtml}
+    <main class="main-content">
 `;
         for (const section of page.sections) {
             htmlContent += this.parseSection(section);
         }
-        htmlContent += `  </div>\n</body>\n</html>`;
+        htmlContent += `    </main>\n  </div>\n</body>\n</html>`;
         const fileContent = `---
 // Archivo autogenerado para Astro (Motor de Gen Portales)
 // Aquí podríamos importar componentes interactivos luego
@@ -176,7 +205,16 @@ ${htmlContent}
         if (section.columns && section.columns > 1 && section.columns <= 4) {
             colsClass = `grid-cols-${section.columns}`;
         }
-        let sectionHtml = `    <section class="section" id="${section.id}">\n`;
+        const sectionStyles = section.styles || {};
+        const inlineStyle = [
+            sectionStyles.backgroundColor ? `background-color: ${sectionStyles.backgroundColor};` : '',
+            sectionStyles.backgroundImage ? `background-image: url('${sectionStyles.backgroundImage}'); background-size: cover; background-position: center;` : '',
+            sectionStyles.padding?.top ? `padding-top: ${sectionStyles.padding.top};` : '',
+            sectionStyles.padding?.bottom ? `padding-bottom: ${sectionStyles.padding.bottom};` : '',
+            sectionStyles.margin?.top ? `margin-top: ${sectionStyles.margin.top};` : '',
+            sectionStyles.margin?.bottom ? `margin-bottom: ${sectionStyles.margin.bottom};` : '',
+        ].filter(Boolean).join(' ');
+        let sectionHtml = `    <section class="section" id="${section.id}" ${inlineStyle ? `style="${inlineStyle}"` : ''}>\n`;
         sectionHtml += `      <div class="grid ${colsClass}">\n`;
         const numCols = section.columns || 1;
         for (let i = 0; i < numCols; i++) {
@@ -191,22 +229,97 @@ ${htmlContent}
         return sectionHtml;
     }
     parseComponent(comp) {
+        const styleStr = this.buildStyleString(comp.styles);
+        const wrapperStyle = comp.styles?.backgroundColor ? ` style="background-color: ${comp.styles.backgroundColor};"` : '';
+        let innerHtml = '';
         switch (comp.type) {
             case 'heading':
-                return `          <h2>${comp.props.text || 'Sin texto'}</h2>\n`;
+                innerHtml = `          <h2 style="${styleStr}">${comp.props.text || 'Sin texto'}</h2>\n`;
+                break;
             case 'paragraph':
-                return `          <p>${comp.props.text || 'Sin texto'}</p>\n`;
+                innerHtml = `          <p style="${styleStr}">${comp.props.text || 'Sin texto'}</p>\n`;
+                break;
             case 'button':
-                return `          <button style="padding: 10px 20px; background-color: #0ea5e9; color: white; font-weight: 500; border: none; border-radius: 6px; cursor: pointer;">${comp.props.text || 'Botón'}</button>\n`;
+                const btnFontSize = comp.styles?.fontSize ? `font-size: ${comp.styles.fontSize};` : '';
+                const { actionType, actionTarget, text } = comp.props;
+                const btnContent = text || 'Botón';
+                const btnStyles = `padding: 10px 20px; background-color: #0ea5e9; color: white; font-weight: 500; border: none; border-radius: 6px; text-decoration: none; cursor: pointer; display: inline-block; ${btnFontSize}`;
+                if (actionType === 'link' && actionTarget) {
+                    innerHtml = `          <div style="${styleStr}"><a href="${actionTarget}" style="${btnStyles}">${btnContent}</a></div>\n`;
+                }
+                else if (actionType === 'scroll' && actionTarget) {
+                    innerHtml = `          <div style="${styleStr}"><a href="${actionTarget.startsWith('#') ? actionTarget : '#' + actionTarget}" style="${btnStyles}">${btnContent}</a></div>\n`;
+                }
+                else if (actionType === 'modal' && actionTarget) {
+                    innerHtml = `          <div style="${styleStr}"><button onclick="document.getElementById('${actionTarget}').showModal()" style="${btnStyles}">${btnContent}</button></div>\n`;
+                }
+                else {
+                    if (comp.props?.url) {
+                        innerHtml = `          <div style="${styleStr}"><a href="${comp.props.url}" style="${btnStyles}">${btnContent}</a></div>\n`;
+                    }
+                    else {
+                        innerHtml = `          <div style="${styleStr}"><button style="${btnStyles}">${btnContent}</button></div>\n`;
+                    }
+                }
+                break;
+            case 'navigation':
+                const links = comp.props.links ? comp.props.links.split('\\n').map((l) => l.split(',')) : [];
+                let linksHtml = '';
+                for (const [text, url] of links) {
+                    linksHtml += `<a href="${url || '#'}" style="text-decoration: none; color: inherit; font-weight: 500;">${text || 'Link'}</a>`;
+                }
+                innerHtml = `          <nav style="display: flex; gap: 1rem; flex-wrap: wrap; width: 100%; ${styleStr}">
+            ${linksHtml}
+          </nav>\n`;
+                break;
             case 'image':
-                return `          <img src="${comp.props.src || 'https://via.placeholder.com/600x400'}" alt="${comp.props.alt || ''}" style="max-width: 100%; height: auto; border-radius: 8px;" />\n`;
+                innerHtml = `          <div style="${styleStr}"><img src="${comp.props.src || 'https://via.placeholder.com/600x400'}" alt="${comp.props.alt || ''}" style="max-width: 100%; height: auto; border-radius: 8px;" /></div>\n`;
+                break;
             case 'video':
-                return `          <iframe width="100%" height="315" src="${comp.props.src || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>\n`;
+                innerHtml = `          <iframe width="100%" height="315" src="${comp.props.src || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>\n`;
+                break;
             case 'html':
-                return `          <div class="custom-html-wrapper">\n            ${comp.props.html || '<!-- Empty HTML block -->'}\n          </div>\n`;
+                innerHtml = `          <div class="custom-html-wrapper">\n            ${comp.props.html || '<!-- Empty HTML block -->'}\n          </div>\n`;
+                break;
+            case 'gallery':
+                const galleryCols = comp.props.columns || 3;
+                const imagesStr = comp.props.images || '';
+                const images = imagesStr ? imagesStr.split(',') : [];
+                let galleryInner = '';
+                for (const img of images) {
+                    galleryInner += `\n            <div style="aspect-ratio: 1; border-radius: 8px; overflow: hidden; background: #eee;"><img src="${img.trim()}" style="width: 100%; height: 100%; object-fit: cover; display: block;" /></div>`;
+                }
+                innerHtml = `          <div style="display: grid; grid-template-columns: repeat(${galleryCols}, 1fr); gap: 1rem; ${styleStr}">${galleryInner}\n          </div>\n`;
+                break;
+            case 'form':
+                innerHtml = `          <div style="background: white; padding: 2rem; border-radius: 8px; border: 1px solid #eee; ${styleStr}">
+            <form action="mailto:${comp.props.emailTo || ''}" method="POST" enctype="text/plain">
+              <input type="text" name="name" placeholder="Nombre completo" class="form-control" required />
+              <input type="email" name="email" placeholder="Correo electrónico" class="form-control" required />
+              <textarea name="message" placeholder="Mensaje" rows="4" class="form-control" required></textarea>
+              <button type="submit" style="padding: 10px 20px; background-color: #0ea5e9; color: white; font-weight: 500; border: none; border-radius: 6px; cursor: pointer;">${comp.props.buttonText || 'Enviar'}</button>
+            </form>
+          </div>\n`;
+                break;
             default:
-                return `          <!-- Tipo base no reconocido en el parser: ${comp.type} -->\n`;
+                innerHtml = `          <!-- Tipo base no reconocido en el parser: ${comp.type} -->\n`;
         }
+        if (wrapperStyle) {
+            return `          <div${wrapperStyle}>\n${innerHtml}          </div>\n`;
+        }
+        return innerHtml;
+    }
+    buildStyleString(styles) {
+        if (!styles)
+            return '';
+        let str = '';
+        if (styles.color)
+            str += `color: ${styles.color}; `;
+        if (styles.textAlign)
+            str += `text-align: ${styles.textAlign}; `;
+        if (styles.fontSize)
+            str += `font-size: ${styles.fontSize}; `;
+        return str.trim();
     }
 };
 exports.GeneradorService = GeneradorService;

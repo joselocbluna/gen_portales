@@ -20,7 +20,11 @@ export const Canvas = () => {
     return (
         <div
             ref={setNodeRef}
-            className={`bg-white min-h-[800px] w-full max-w-5xl shadow-md rounded border p-4 transition-all ${isOver ? 'border-blue-500 bg-blue-50' : 'border-slate-200'}`}
+            className={`min-h-[800px] w-full max-w-5xl shadow-md rounded border p-4 transition-all ${isOver ? 'border-blue-500 ring-4 ring-blue-50' : 'border-slate-200'}`}
+            style={{
+                backgroundColor: portal?.globalStyles?.bodyBackground || '#ffffff',
+                color: portal?.settings?.colorPalette?.text || 'inherit'
+            }}
             onClick={() => selectComponent(null)}
         >
             {!portal ? (
