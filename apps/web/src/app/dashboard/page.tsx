@@ -4,20 +4,31 @@ import { useSession, signOut } from "next-auth/react";
 import { LogOut, Plus, Settings, Globe } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    if (status === "loading") {
-        return <div className="flex justify-center mt-32">Cargando portales...</div>;
-    }
+    const [myPortals, setMyPortals] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // En el futuro, estos vendrán desde el backend NestJS (GET /proyectos/mine o similar)
-    const myPortals = [
-        { id: "portal-1", name: "Portal Inmobiliario", slug: "portal-1-demo", published: false },
-        // { id: "portal-2", name: "E-commerce Electro", slug: "ecommerce-electro", published: true },
-    ];
+    useEffect(() => {
+        fetch('http://localhost:3002/proyectos')
+            .then(res => res.json())
+            .then(data => {
+                setMyPortals(data);
+                setIsLoading(false);
+            })
+            .catch(err => {
+                console.error("Error cargando proyectos:", err);
+                setIsLoading(false);
+            });
+    }, []);
+
+    if (status === "loading" || isLoading) {
+        return <div className="flex justify-center mt-32 text-gray-500">Cargando portales...</div>;
+    }
 
     return (
         <div className="min-h-screen bg-gray-50 text-gray-800">

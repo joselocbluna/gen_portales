@@ -26,6 +26,12 @@ let ProyectosController = class ProyectosController {
     findOne(id) {
         return this.proyectosService.findOne(id);
     }
+    getPortalState(id) {
+        return this.proyectosService.getPortalState(id);
+    }
+    savePortalState(id, state) {
+        return this.proyectosService.savePortalState(id, state);
+    }
     create(body) {
         return this.proyectosService.create(body);
     }
@@ -44,6 +50,21 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], ProyectosController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)(':id/state'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], ProyectosController.prototype, "getPortalState", null);
+__decorate([
+    (0, common_1.Post)(':id/state'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", void 0)
+], ProyectosController.prototype, "savePortalState", null);
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),

@@ -15,8 +15,46 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
     const reorderSections = useCanvasStore((state) => state.reorderSections);
     const portal = useCanvasStore((state) => state.portal);
     const activePageId = useCanvasStore((state) => state.activePageId);
-
+    const initPortal = useCanvasStore((state) => state.initPortal);
+    const [isLoadingUrl, setIsLoadingUrl] = React.useState(true);
+    const [isSaving, setIsSaving] = React.useState(false);
     const [isGenerating, setIsGenerating] = React.useState(false);
+
+    React.useEffect(() => {
+        if (!portalId) return;
+        setIsLoadingUrl(true);
+        fetch(`http://localhost:3002/proyectos/${portalId}/state`)
+            .then(res => res.json())
+            .then(data => {
+                if (data && data.id) {
+                    initPortal(data);
+                }
+            })
+            .catch(err => console.error("Error cargando portal:", err))
+            .finally(() => setIsLoadingUrl(false));
+    }, [portalId, initPortal]);
+
+    const handleSave = async () => {
+        if (!portal) return;
+        setIsSaving(true);
+        try {
+            const res = await fetch(`http://localhost:3002/proyectos/${portalId}/state`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(portal)
+            });
+            if (res.ok) {
+                alert('Portal guardado exitosamente.');
+            } else {
+                alert('Error al guardar el portal.');
+            }
+        } catch (error) {
+            console.error('Error guardando:', error);
+            alert('Fallo de red al guardar.');
+        } finally {
+            setIsSaving(false);
+        }
+    };
 
     const handleGenerateAstro = async () => {
         if (!portal) return;
@@ -28,14 +66,14 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
                 body: JSON.stringify(portal)
             });
             const data = await res.json();
-            if (data.success) {
-                alert(`¡Éxito! Proyecto generado de forma local en:\n${data.path}`);
+            if (res.ok && data?.message) {
+                alert(`¡Éxito! ${data.message}\nUbicación: ${data.path || ''}`);
             } else {
-                alert(`Error del generador: ${data.message}\n${data.error || ''}`);
+                alert(`Error del generador: ${data?.message || 'Error desconocido'}`);
             }
         } catch (error) {
             console.error('Error invocando motor astro:', error);
-            alert('Fallo de red al conectar con el API del Generador (Puerto 3002).');
+            alert('Fallo de red al conectar con el API del Generador.');
         } finally {
             setIsGenerating(false);
         }
@@ -112,12 +150,19 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
                     <header className="h-14 bg-white border-b border-slate-200 flex items-center px-4 justify-between">
                         <div className="font-semibold text-slate-700">Editor de Portales</div>
                         <div className="flex gap-2">
+                            <button
+                                onClick={handleSave}
+                                disabled={isSaving || isLoadingUrl}
+                                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${isSaving ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 font-medium shadow-sm text-white'}`}
+                            >
+                                {isSaving ? 'Guardando...' : 'Guardar'}
+                            </button>
                             <button className="px-3 py-1.5 text-sm bg-slate-100 hover:bg-slate-200 rounded-md text-slate-700 transition-colors">
                                 Previsualizar
                             </button>
                             <button
                                 onClick={handleGenerateAstro}
-                                disabled={isGenerating}
+                                disabled={isGenerating || isLoadingUrl}
                                 className={`px-3 py-1.5 text-sm rounded-md text-white transition-colors ${isGenerating ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 font-medium shadow-sm'}`}
                             >
                                 {isGenerating ? 'Generando Astro...' : 'Exportar a Astro'}

@@ -4,8 +4,8 @@ export declare class ProyectosService {
     constructor(prisma: PrismaService);
     findAll(): Promise<{
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;
@@ -17,8 +17,8 @@ export declare class ProyectosService {
     }[]>;
     findOne(id: string): Promise<{
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;
@@ -28,14 +28,38 @@ export declare class ProyectosService {
         templateId: string | null;
         publishedAt: Date | null;
     } | null>;
+    getPortalState(id: string): Promise<{
+        id: string;
+        name: string;
+        slug: string;
+        settings: string | number | true | import("@prisma/client/runtime/library").JsonObject | import("@prisma/client/runtime/library").JsonArray;
+        pages: {
+            id: string;
+            name: string;
+            title: string;
+            path: string;
+            description: string | null;
+            layout: string;
+            sections: string | number | true | import("@prisma/client/runtime/library").JsonObject | import("@prisma/client/runtime/library").JsonArray;
+            meta: {
+                isHomepage: boolean;
+                isPublished: boolean;
+                showInNav: boolean;
+                order: number;
+            };
+        }[];
+    } | null>;
+    savePortalState(id: string, portalState: any): Promise<{
+        success: boolean;
+    }>;
     create(data: {
         name: string;
         slug: string;
         companyId: string;
     }): Promise<{
         id: string;
-        name: string;
         slug: string;
+        name: string;
         description: string | null;
         settings: import("@prisma/client/runtime/library").JsonValue | null;
         createdAt: Date;
