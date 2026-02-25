@@ -104,13 +104,48 @@ export const SidebarRight = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-medium text-slate-500 mb-1">Texto</label>
-                                    {(data as Component).type === 'paragraph' ? (
+                                    <label className="block text-xs font-medium text-slate-500 mb-1">
+                                        {(data as Component).type === 'html' ? 'Código HTML' : 'Texto'}
+                                    </label>
+                                    {(data as Component).type === 'html' ? (
+                                        <textarea
+                                            value={(data as Component).props?.html || ''}
+                                            onChange={(e) => updateComponentProps(selectedComponentId, { html: e.target.value })}
+                                            className="w-full text-xs font-mono p-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
+                                            placeholder="<div class='mi-faro'>Hola</div>"
+                                        />
+                                    ) : (data as Component).type === 'video' ? (
+                                        <input
+                                            type="text"
+                                            value={(data as Component).props?.src || ''}
+                                            onChange={(e) => updateComponentProps(selectedComponentId, { src: e.target.value })}
+                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            placeholder="URL de YouTube Embed..."
+                                        />
+                                    ) : (data as Component).type === 'image' ? (
+                                        <div className="space-y-2">
+                                            <input
+                                                type="text"
+                                                value={(data as Component).props?.src || ''}
+                                                onChange={(e) => updateComponentProps(selectedComponentId, { src: e.target.value })}
+                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                placeholder="https://..."
+                                            />
+                                            <label className="block text-xs font-medium text-slate-500 mb-1">Texto Alternativo (Alt)</label>
+                                            <input
+                                                type="text"
+                                                value={(data as Component).props?.alt || ''}
+                                                onChange={(e) => updateComponentProps(selectedComponentId, { alt: e.target.value })}
+                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                placeholder="Descripción de la imagen"
+                                            />
+                                        </div>
+                                    ) : (data as Component).type === 'paragraph' ? (
                                         <textarea
                                             value={localText}
                                             onChange={handleTextChange}
                                             onBlur={handleTextBlur}
-                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[100px]"
+                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
                                             placeholder="Ingresa el contenido..."
                                         />
                                     ) : (

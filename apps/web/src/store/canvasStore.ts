@@ -93,11 +93,15 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
         const section = page.sections.find(s => s.id === sectionId);
         if (!section) return;
 
+        let initialProps = { text: "Haz clic para editar" } as Record<string, any>;
+        if (componentType === 'video') initialProps = { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' };
+        if (componentType === 'html') initialProps = { html: '<div class="p-4 bg-gray-100 rounded text-center">Custom HTML</div>' };
+
         const newComponent: Component = {
             id: `comp-${Date.now()}`,
             type: componentType as any,
             name: `Elemento ${componentType}`,
-            props: { text: "Haz clic para editar" },
+            props: initialProps,
             styles: {},
             responsive: { desktop: { visible: true }, tablet: { visible: true }, mobile: { visible: true } },
             order: section.components.length,
@@ -108,12 +112,23 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
 
     updateComponentProps: (componentId, props) => set(produce((state: CanvasStoreState) => {
         if (!state.portal) return;
-        // Helper to find and update component deeply (implementation draft)
         state.portal.pages.forEach(page => {
             page.sections.forEach(section => {
                 const compIndex = section.components.findIndex(c => c.id === componentId);
                 if (compIndex !== -1) {
                     section.components[compIndex].props = { ...section.components[compIndex].props, ...props };
+                }
+            });
+        });
+    })),
+
+    updateComponentStyles: (componentId, styles) => set(produce((state: CanvasStoreState) => {
+        if (!state.portal) return;
+        state.portal.pages.forEach(page => {
+            page.sections.forEach(section => {
+                const compIndex = section.components.findIndex(c => c.id === componentId);
+                if (compIndex !== -1) {
+                    section.components[compIndex].styles = { ...section.components[compIndex].styles, ...styles };
                 }
             });
         });

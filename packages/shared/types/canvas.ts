@@ -141,6 +141,7 @@ export type ComponentType =
     | "table"
     | "map"
     | "embed"
+    | "html"
     // Custom
     | "custom";
 

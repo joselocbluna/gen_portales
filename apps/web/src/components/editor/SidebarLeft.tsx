@@ -89,6 +89,8 @@ export const SidebarLeft = () => {
                         <DraggableItem id="drag-text" label="Texto" dragType="content" componentType="paragraph" />
                         <DraggableItem id="drag-button" label="Botón" dragType="content" componentType="button" />
                         <DraggableItem id="drag-image" label="Imagen" dragType="content" componentType="image" />
+                        <DraggableItem id="drag-video" label="Video" dragType="content" componentType="video" />
+                        <DraggableItem id="drag-html" label="HTML" dragType="content" componentType="html" />
                     </div>
                 </div>
             </div>

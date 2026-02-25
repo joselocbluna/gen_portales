@@ -20,5 +20,5 @@ A continuación se detalla la configuración de red, puertos y credenciales para
 >    - **Port:** `5432`
 >    - **Maintenance database:** `gen_portales`
 >    - **Username:** `postgres`
->    - **Password:** `password`
+>    - **Password:** `Admin123pass`
 > 5. Guarda la conexión.

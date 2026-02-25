@@ -132,7 +132,9 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
             'drag-title': 'Título',
             'drag-text': 'Texto',
             'drag-button': 'Botón',
-            'drag-image': 'Imagen'
+            'drag-image': 'Imagen',
+            'drag-video': 'Video',
+            'drag-html': 'Bloque HTML'
         };
         return map[id] || id;
     };

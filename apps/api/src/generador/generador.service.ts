@@ -188,6 +188,10 @@ ${htmlContent}
                 return `          <button style="padding: 10px 20px; background-color: #0ea5e9; color: white; font-weight: 500; border: none; border-radius: 6px; cursor: pointer;">${comp.props.text || 'Botón'}</button>\n`;
             case 'image':
                 return `          <img src="${comp.props.src || 'https://via.placeholder.com/600x400'}" alt="${comp.props.alt || ''}" style="max-width: 100%; height: auto; border-radius: 8px;" />\n`;
+            case 'video':
+                return `          <iframe width="100%" height="315" src="${comp.props.src || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius: 8px;"></iframe>\n`;
+            case 'html':
+                return `          <div class="custom-html-wrapper">\n            ${comp.props.html || '<!-- Empty HTML block -->'}\n          </div>\n`;
             default:
                 return `          <!-- Tipo base no reconocido en el parser: ${comp.type} -->\n`;
         }

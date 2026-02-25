@@ -12,6 +12,48 @@ interface DroppableColumnProps {
     components: PortalComponent[];
 }
 
+const renderComponentPreview = (comp: PortalComponent) => {
+    switch (comp.type) {
+        case 'heading':
+            return <h2 className="text-2xl font-bold text-slate-800">{comp.props.text || 'Sin texto'}</h2>;
+        case 'paragraph':
+            return <p className="text-base text-slate-600 leading-relaxed">{comp.props.text || 'Sin texto'}</p>;
+        case 'button':
+            return (
+                <button className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow-sm pointer-events-none">
+                    {comp.props.text || 'Botón'}
+                </button>
+            );
+        case 'image':
+            return (
+                <img
+                    src={comp.props?.src || 'https://via.placeholder.com/600x400'}
+                    alt={comp.props?.alt || 'preview'}
+                    className="w-full max-h-[400px] object-cover rounded-md pointer-events-none border border-slate-100 shadow-sm"
+                />
+            );
+        case 'video':
+            return (
+                <div className="relative w-full rounded overflow-hidden pointer-events-none outline outline-1 outline-slate-200" style={{ paddingTop: '56.25%' }}>
+                    <iframe
+                        className="absolute top-0 left-0 w-full h-full"
+                        src={comp.props?.src || 'https://www.youtube.com/embed/dQw4w9WgXcQ'}
+                        frameBorder="0"
+                    ></iframe>
+                </div>
+            );
+        case 'html':
+            return (
+                <div
+                    className="w-full pointer-events-none"
+                    dangerouslySetInnerHTML={{ __html: comp.props?.html || '<div class="p-4 bg-slate-50 text-center text-slate-500 rounded border border-dashed border-slate-300">Bloque HTML (Vacío)</div>' }}
+                />
+            );
+        default:
+            return <div className="text-slate-800 leading-tight truncate">{comp.props.text || comp.name}</div>;
+    }
+};
+
 const DroppableColumn = ({ sectionId, columnIndex, components }: DroppableColumnProps) => {
     const selectComponent = useCanvasStore((state) => state.selectComponent);
     const selectedComponentId = useCanvasStore((state) => state.selectedComponentId);
@@ -23,23 +65,30 @@ const DroppableColumn = ({ sectionId, columnIndex, components }: DroppableColumn
     return (
         <div
             ref={setNodeRef}
-            className={`min-h-[100px] p-3 rounded transition-all flex flex-col gap-2 ${isOver ? 'bg-blue-50 ring-2 ring-blue-200' : 'bg-slate-50 border border-slate-200 border-dashed'
+            className={`min-h-[100px] p-2 rounded transition-all flex flex-col gap-2 ${isOver ? 'bg-blue-50 ring-2 ring-blue-200' : 'bg-transparent border border-transparent hover:border-slate-200 border-dashed'
                 }`}
         >
             {components.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-slate-400 text-xs italic text-center rounded bg-slate-100/30">
-                    Columna {columnIndex + 1}
+                <div className="flex-1 flex items-center justify-center text-slate-400 text-xs italic text-center rounded bg-slate-50 border border-slate-200 border-dashed">
+                    Soltar elementos aquí
                 </div>
             ) : (
                 components.map(comp => (
                     <div
                         key={comp.id}
-                        className={`p-3 bg-white shadow-sm border rounded text-sm cursor-pointer transition-colors ${selectedComponentId === comp.id ? 'border-blue-500 ring-1 ring-blue-500' : 'border-slate-200 hover:border-blue-300'
+                        className={`relative group bg-white rounded-md cursor-pointer transition-all ${selectedComponentId === comp.id ? 'ring-2 ring-blue-500 shadow-md' : 'ring-1 ring-slate-200 hover:ring-blue-300 hover:shadow-sm'
                             }`}
                         onClick={(e) => { e.stopPropagation(); selectComponent(comp.id); }}
                     >
-                        <strong className="uppercase text-[10px] text-slate-500 block mb-1 tracking-wider">{comp.type}</strong>
-                        <div className="text-slate-800 leading-tight">{comp.props.text || comp.name}</div>
+                        {/* Indicador de Tipo (Visible al pasar el mouse o seleccionado) */}
+                        <div className={`absolute -top-2.5 left-3 bg-white px-2 rounded-full border text-[9px] uppercase font-bold tracking-wider z-10 transition-opacity ${selectedComponentId === comp.id ? 'opacity-100 border-blue-500 text-blue-600' : 'opacity-0 group-hover:opacity-100 border-slate-300 text-slate-500'}`}>
+                            {comp.type}
+                        </div>
+
+                        {/* Contenedor del Preview WYSIWYG */}
+                        <div className="p-4">
+                            {renderComponentPreview(comp)}
+                        </div>
                     </div>
                 ))
             )}
