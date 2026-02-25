@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-
+import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function main() {
@@ -33,6 +33,48 @@ async function main() {
     });
 
     console.log(`✅ Proyecto (Portal) creado/verificado: ${project.name} | ID: ${project.id}`);
+
+    // 3. Crear Role
+    const role = await prisma.role.upsert({
+        where: { name: 'admin' },
+        update: {},
+        create: {
+            id: 'role-admin-1',
+            name: 'admin',
+            displayName: 'Administrador',
+            permissions: {},
+            isSystem: true,
+        },
+    });
+
+    console.log(`✅ Rol creado/verificado: ${role.name}`);
+
+    // 4. Crear Usuario
+    const hashedPassword = await bcrypt.hash('admin', 10);
+    const user = await prisma.user.upsert({
+        where: { email: 'admin@empresa.com' },
+        update: {},
+        create: {
+            id: 'user-1',
+            email: 'admin@empresa.com',
+            password: hashedPassword,
+            firstName: 'Admin',
+            lastName: 'Empresa Demo',
+        },
+    });
+
+    // Vincular Usuario con Empresa
+    await prisma.companyUser.upsert({
+        where: { userId_companyId: { userId: user.id, companyId: company.id } },
+        update: {},
+        create: {
+            userId: user.id,
+            companyId: company.id,
+            roleId: role.id,
+        },
+    });
+
+    console.log(`✅ Usuario creado/verificado: ${user.email}`);
 
 }
 

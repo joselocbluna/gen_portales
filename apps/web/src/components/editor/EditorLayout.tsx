@@ -8,7 +8,7 @@ import { DndContext, DragOverlay, DragStartEvent, DragEndEvent } from '@dnd-kit/
 import { SidebarItemOverlay } from './SidebarLeft';
 import { useCanvasStore } from '../../store/canvasStore';
 
-export const EditorLayout = () => {
+export const EditorLayout = ({ portalId }: { portalId: string }) => {
     const [activeId, setActiveId] = React.useState<string | null>(null);
     const addSectionFromDrag = useCanvasStore((state) => state.addSectionFromDrag);
     const addComponentFromDrag = useCanvasStore((state) => state.addComponentFromDrag);
