@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useCanvasStore } from '../../store/canvasStore';
 import { Component, Section } from '@generador/shared';
+import { ImageUpload } from '../ui/ImageUpload';
 
 export const SidebarRight = () => {
     const portal = useCanvasStore((state) => state.portal);
@@ -220,12 +221,10 @@ export const SidebarRight = () => {
                                         />
                                     ) : (data as Component).type === 'image' ? (
                                         <div className="space-y-2">
-                                            <input
-                                                type="text"
+                                            <ImageUpload
+                                                label="URL de la Imagen"
                                                 value={(data as Component).props?.src || ''}
-                                                onChange={(e) => updateComponentProps(selectedComponentId, { src: e.target.value })}
-                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="https://..."
+                                                onChange={(url) => updateComponentProps(selectedComponentId, { src: url })}
                                             />
                                             <label className="block text-xs font-medium text-slate-500 mb-1">Texto Alternativo (Alt)</label>
                                             <input
@@ -462,13 +461,10 @@ export const SidebarRight = () => {
                                         </div>
 
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Imagen de Fondo (URL)</label>
-                                            <input
-                                                type="text"
+                                            <ImageUpload
+                                                label="Imagen de Fondo (URL)"
                                                 value={(data as Section).styles?.backgroundImage || ''}
-                                                onChange={(e) => updateSectionStyles(selectedComponentId, { backgroundImage: e.target.value })}
-                                                className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                                placeholder="https://..."
+                                                onChange={(url) => updateSectionStyles(selectedComponentId, { backgroundImage: url })}
                                             />
                                         </div>
 

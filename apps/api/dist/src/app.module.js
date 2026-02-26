@@ -15,12 +15,13 @@ const empresas_module_1 = require("./empresas/empresas.module");
 const proyectos_module_1 = require("./proyectos/proyectos.module");
 const generador_module_1 = require("./generador/generador.module");
 const auth_module_1 = require("./auth/auth.module");
+const storage_module_1 = require("./storage/storage.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule, auth_module_1.AuthModule, empresas_module_1.EmpresasModule, proyectos_module_1.ProyectosModule, generador_module_1.GeneradorModule],
+        imports: [prisma_module_1.PrismaModule, auth_module_1.AuthModule, empresas_module_1.EmpresasModule, proyectos_module_1.ProyectosModule, generador_module_1.GeneradorModule, storage_module_1.StorageModule],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
     })
