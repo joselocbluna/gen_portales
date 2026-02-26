@@ -34,8 +34,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label
             if (data.url) {
                 onChange(data.url);
             }
-        } catch (err: any) {
-            setError(err.message || 'Error uploading file');
+        } catch (err: unknown) {
+            const error = err as Error;
+            setError(error.message || 'Error uploading file');
         } finally {
             setIsUploading(false);
         }
@@ -73,6 +74,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, label
 
             {value && (
                 <div className="relative mt-2 rounded border border-[#334155] overflow-hidden group">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={value} alt="Preview" className="w-full h-24 object-cover" />
                     <button
                         onClick={() => onChange('')}

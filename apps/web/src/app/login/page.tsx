@@ -203,10 +203,10 @@ export default function LoginPage() {
 
                         {/* Abstract Code Lines */}
                         <div className="absolute bottom-48 left-20 hidden xl:block opacity-40 font-mono text-[10px] text-white space-y-1">
-                            <div className="flex gap-2"><span>&lt;section</span><span className="text-blue-200">className="portal-container"</span><span>&gt;</span></div>
+                            <div className="flex gap-2"><span>&lt;section</span><span className="text-blue-200">className=&quot;portal-container&quot;</span><span>&gt;</span></div>
                             <div className="flex gap-2 pl-4"><span>&lt;header&gt;</span><span className="text-blue-200">Main Navigation</span><span>&lt;/header&gt;</span></div>
-                            <div className="flex gap-2 pl-4"><span>&lt;div</span><span className="text-blue-200">id="dynamic-content"</span><span>&gt;</span></div>
-                            <div className="flex gap-2 pl-8"><span>&lt;img</span><span className="text-blue-200">src="logo.png"</span><span>/&gt;</span></div>
+                            <div className="flex gap-2 pl-4"><span>&lt;div</span><span className="text-blue-200">id=&quot;dynamic-content&quot;</span><span>&gt;</span></div>
+                            <div className="flex gap-2 pl-8"><span>&lt;img</span><span className="text-blue-200">src=&quot;logo.png&quot;</span><span>/&gt;</span></div>
                             <div className="flex gap-2 pl-4"><span>&lt;/div&gt;</span></div>
                             <div className="flex gap-2"><span>&lt;/section&gt;</span></div>
                         </div>
@@ -221,7 +221,7 @@ export default function LoginPage() {
                 <div className="absolute bottom-16 left-16 right-16">
                     <blockquote className="text-white">
                         <p className="text-2xl font-light leading-relaxed">
-                            "La construcción de portales web nunca fue tan intuitiva. Diseñamos para el futuro de la web modular."
+                            &quot;La construcción de portales web nunca fue tan intuitiva. Diseñamos para el futuro de la web modular.&quot;
                         </p>
                         <footer className="mt-6 flex items-center gap-4">
                             <div className="h-10 w-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-inner">

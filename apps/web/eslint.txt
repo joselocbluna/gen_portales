@@ -1,0 +1,88 @@
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/app/api/auth/[...nextauth]/route.ts
+  12:42  warning  'req' is defined but never used           @typescript-eslint/no-unused-vars
+  37:30  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:44  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  58:39  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  59:46  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  65:34  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  66:34  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  67:34  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  68:34  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/app/dashboard/page.tsx
+  16:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/app/login/page.tsx
+  206:123  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  206:140  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  208:117  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  208:133  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  209:118  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  209:127  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  224:29   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  224:130  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/components/editor/DroppableSection.tsx
+  17:46  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  29:68  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  45:44  warning  'url' is defined but never used                                                                                                                                                                                                                                                          @typescript-eslint/no-unused-vars
+  55:17  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  85:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/components/editor/SidebarRight.tsx
+   15:26   error  Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. This value was memoized in source but not in compilation output.
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/components/editor/SidebarRight.tsx:15:26
+  13 |     const updateSectionStyles = useCanvasStore((state) => state.updateSectionStyles);
+  14 |
+> 15 |     const selectedItem = useMemo(() => {
+     |                          ^^^^^^^^^^^^^^^
+> 16 |         if (!portal || !activePageId || !selectedComponentId) return null;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 17 |         const page = portal.pages.find(p => p.id === activePageId);
+     …
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 27 |         return null;
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 28 |     }, [portal, activePageId, selectedComponentId]);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Could not preserve existing memoization
+  29 |
+  30 |     // Estado local para los inputs
+  31 |     const [localText, setLocalText] = useState('');  react-hooks/preserve-manual-memoization
+   37:13   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/components/editor/SidebarRight.tsx:37:13
+  35 |         if (selectedItem?.type === 'component') {
+  36 |             const comp = selectedItem.data as Component;
+> 37 |             setLocalText(comp.props?.text || '');
+     |             ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  38 |         }
+  39 |     }, [selectedItem]);
+  40 |                                                                                                                                                   react-hooks/set-state-in-effect
+   73:113  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  118:87   error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  124:87   error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  141:59   error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/components/ui/ImageUpload.tsx
+  37:23  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  76:21  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/joslop/Documents/CBLUNA/proyectos/gen_portales/apps/web/src/store/canvasStore.ts
+   20:71  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   21:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:79  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  113:36  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 36 problems (31 errors, 5 warnings)
+

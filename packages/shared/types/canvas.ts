@@ -82,7 +82,9 @@ export type SectionType =
     | "cta"
     | "form"
     | "footer"
-    | "custom";
+    | "custom"
+    | "columns"
+    | "section";
 
 export interface SectionStyles {
     backgroundColor?: string;

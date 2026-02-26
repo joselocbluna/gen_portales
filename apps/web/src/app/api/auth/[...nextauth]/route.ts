@@ -9,7 +9,7 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "Email", type: "email", placeholder: "admin@empresa.com" },
                 password: { label: "Password", type: "password" }
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
@@ -34,7 +34,7 @@ export const authOptions: NextAuthOptions = {
                             companyId: data.user.companyId,
                             role: data.user.role,
                             accessToken: data.access_token,
-                        } as any;
+                        } as import("next-auth").User & { companyId?: string; role?: string; accessToken?: string };
                     }
                     return null;
                 } catch (error) {
@@ -53,19 +53,21 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id;
-                token.companyId = (user as any).companyId;
-                token.role = (user as any).role;
-                token.accessToken = (user as any).accessToken;
+                const u = user as import("next-auth").User & { companyId?: string; role?: string; accessToken?: string };
+                token.id = u.id;
+                token.companyId = u.companyId;
+                token.role = u.role;
+                token.accessToken = u.accessToken;
             }
             return token;
         },
         async session({ session, token }) {
             if (token && session.user) {
-                (session.user as any).id = token.id;
-                (session.user as any).companyId = token.companyId;
-                (session.user as any).role = token.role;
-                (session.user as any).accessToken = token.accessToken;
+                const u = session.user as import("next-auth").User & { id?: string; companyId?: string; role?: string; accessToken?: string };
+                u.id = token.id as string;
+                u.companyId = token.companyId as string;
+                u.role = token.role as string;
+                u.accessToken = token.accessToken as string;
             }
             return session;
         }

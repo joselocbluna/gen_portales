@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState } from 'react';
 import { useCanvasStore } from '../../store/canvasStore';
 import { Component, Section } from '@generador/shared';
 import { ImageUpload } from '../ui/ImageUpload';
@@ -12,7 +12,7 @@ export const SidebarRight = () => {
     const updateSectionProps = useCanvasStore((state) => state.updateSectionProps);
     const updateSectionStyles = useCanvasStore((state) => state.updateSectionStyles);
 
-    const selectedItem = useMemo(() => {
+    const getSelectedItem = () => {
         if (!portal || !activePageId || !selectedComponentId) return null;
         const page = portal.pages.find(p => p.id === activePageId);
         if (!page) return null;
@@ -25,18 +25,24 @@ export const SidebarRight = () => {
             if (component) return { type: 'component' as const, data: component };
         }
         return null;
-    }, [portal, activePageId, selectedComponentId]);
+    };
+
+    const selectedItem = getSelectedItem();
 
     // Estado local para los inputs
     const [localText, setLocalText] = useState('');
+    const [prevSelectedId, setPrevSelectedId] = useState<string | null>(null);
 
-    // Sincronizar el estado local cuando cambia el item seleccionado
-    useEffect(() => {
+    // Sincronizar el estado local cuando cambia el item seleccionado (durante el render)
+    if (selectedComponentId !== prevSelectedId) {
+        setPrevSelectedId(selectedComponentId);
         if (selectedItem?.type === 'component') {
             const comp = selectedItem.data as Component;
             setLocalText(comp.props?.text || '');
+        } else {
+            setLocalText('');
         }
-    }, [selectedItem]);
+    }
 
     const handleTextChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setLocalText(e.target.value);
@@ -57,9 +63,9 @@ export const SidebarRight = () => {
         const activePage = portal?.pages.find(p => p.id === activePageId);
 
         return (
-            <aside className="w-72 bg-white border-l border-slate-200 flex flex-col h-full flex-shrink-0">
-                <div className="h-14 border-b border-slate-200 flex items-center px-4">
-                    <h2 className="font-semibold text-sm text-slate-800">Ajustes Generales</h2>
+            <aside className="w-72 bg-[#0f172a] border-l border-[#1e293b] flex flex-col h-full flex-shrink-0">
+                <div className="h-14 border-b border-[#1e293b] bg-[#0b1120] flex items-center px-4">
+                    <h2 className="font-semibold text-sm text-white">Ajustes Generales</h2>
                 </div>
                 <div className="p-4 overflow-y-auto space-y-6">
                     {/* Ajustes de Pagina */}
@@ -67,11 +73,11 @@ export const SidebarRight = () => {
                         <div>
                             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Página Actual</h3>
                             <div>
-                                <label className="block text-xs font-medium text-slate-500 mb-1">Estructura Base (Layout)</label>
+                                <label className="block text-xs font-medium text-slate-400 mb-1">Estructura Base (Layout)</label>
                                 <select
                                     value={activePage.layout || 'default'}
-                                    onChange={(e) => updatePageProps(activePage.id, { layout: e.target.value as any })}
-                                    className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onChange={(e) => updatePageProps(activePage.id, { layout: e.target.value as 'default' | 'fullwidth' | 'sidebar' })}
+                                    className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
                                     <option value="default">Por Defecto</option>
                                     <option value="fullwidth">Ancho Completo</option>
@@ -81,7 +87,7 @@ export const SidebarRight = () => {
                         </div>
                     )}
 
-                    <hr className="border-slate-100" />
+                    <hr className="border-[#1e293b]" />
 
                     {/* Configuraciones Generales de la App/Portal */}
                     <div>
@@ -91,18 +97,18 @@ export const SidebarRight = () => {
                                 type="color"
                                 value={portal?.globalStyles?.bodyBackground || '#ffffff'}
                                 onChange={(e) => updateGlobalStyles({ bodyBackground: e.target.value })}
-                                className="w-8 h-8 rounded border border-slate-200 cursor-pointer p-0 appearance-none bg-transparent"
+                                className="w-8 h-8 rounded border border-[#334155] cursor-pointer p-0 appearance-none bg-transparent"
                             />
                             <input
                                 type="text"
                                 value={portal?.globalStyles?.bodyBackground || '#ffffff'}
                                 onChange={(e) => updateGlobalStyles({ bodyBackground: e.target.value })}
-                                className="flex-1 text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="flex-1 text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                             />
                         </div>
                     </div>
 
-                    <hr className="border-slate-100" />
+                    <hr className="border-[#1e293b]" />
 
                     <div>
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Paleta de Colores</h3>
@@ -111,19 +117,19 @@ export const SidebarRight = () => {
                         <div className="space-y-3">
                             {['primary', 'secondary', 'accent', 'background', 'text'].map((colorKey) => (
                                 <div key={colorKey}>
-                                    <label className="block text-xs font-medium text-slate-500 mb-1 capitalize">{colorKey}</label>
+                                    <label className="block text-xs font-medium text-slate-400 mb-1 capitalize">{colorKey}</label>
                                     <div className="flex items-center gap-2">
                                         <input
                                             type="color"
-                                            value={(portal?.settings?.colorPalette as any)?.[colorKey] || '#000000'}
+                                            value={(portal?.settings?.colorPalette as Record<string, string>)?.[colorKey] || '#000000'}
                                             onChange={(e) => updateColorPalette({ [colorKey]: e.target.value })}
-                                            className="w-8 h-8 rounded border border-slate-200 cursor-pointer p-0 appearance-none bg-transparent"
+                                            className="w-8 h-8 rounded border border-[#334155] cursor-pointer p-0 appearance-none bg-transparent"
                                         />
                                         <input
                                             type="text"
-                                            value={(portal?.settings?.colorPalette as any)?.[colorKey] || '#000000'}
+                                            value={(portal?.settings?.colorPalette as Record<string, string>)?.[colorKey] || '#000000'}
                                             onChange={(e) => updateColorPalette({ [colorKey]: e.target.value })}
-                                            className="flex-1 text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="flex-1 text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         />
                                     </div>
                                 </div>
@@ -138,7 +144,7 @@ export const SidebarRight = () => {
     const { type, data } = selectedItem;
 
     const renderColorSwatches = (onSelect: (color: string) => void) => {
-        const palette = portal?.settings?.colorPalette as any;
+        const palette = portal?.settings?.colorPalette as Record<string, string>;
         if (!palette) return null;
         return (
             <div className="flex gap-1.5 mt-2">
@@ -160,9 +166,9 @@ export const SidebarRight = () => {
     };
 
     return (
-        <aside className="w-72 bg-white border-l border-slate-200 flex flex-col h-full flex-shrink-0">
-            <div className="h-14 border-b border-slate-200 flex items-center px-4">
-                <h2 className="font-semibold text-sm text-slate-800">Inspector</h2>
+        <aside className="w-72 bg-[#0f172a] border-l border-[#1e293b] flex flex-col h-full flex-shrink-0">
+            <div className="h-14 border-b border-[#1e293b] bg-[#0b1120] flex items-center px-4">
+                <h2 className="font-semibold text-sm text-white">Inspector</h2>
             </div>
 
             <div className="p-4 overflow-y-auto">
@@ -172,21 +178,21 @@ export const SidebarRight = () => {
                         <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">General</h3>
                         <div className="space-y-3">
                             <div>
-                                <label className="block text-xs font-medium text-slate-500 mb-1">Tipo</label>
-                                <div className="text-sm font-medium text-slate-800 capitalize">
+                                <label className="block text-xs font-medium text-slate-400 mb-1">Tipo</label>
+                                <div className="text-sm font-medium text-white capitalize">
                                     {type === 'section' ? `Sección ${(data as Section).type}` : `Componente ${(data as Component).type}`}
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-xs font-medium text-slate-500 mb-1">ID</label>
-                                <div className="text-xs font-mono text-slate-500 bg-slate-50 p-1.5 rounded border border-slate-100 truncate">
+                                <label className="block text-xs font-medium text-slate-400 mb-1">ID</label>
+                                <div className="text-xs font-mono text-slate-400 bg-[#0b1120] p-1.5 rounded border border-[#1e293b] truncate">
                                     {data.id}
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <hr className="border-slate-100" />
+                    <hr className="border-[#1e293b]" />
 
                     {/* Propiedades Dinámicas */}
                     <div>
@@ -195,20 +201,20 @@ export const SidebarRight = () => {
                         {type === 'component' && (
                             <div className="space-y-3">
                                 <div>
-                                    <label className="block text-xs font-medium text-slate-500 mb-1">Columna</label>
-                                    <div className="text-sm font-medium text-slate-800 capitalize">
+                                    <label className="block text-xs font-medium text-slate-400 mb-1">Columna</label>
+                                    <div className="text-sm font-medium text-white capitalize">
                                         {(data as Component).column !== undefined ? (data as Component).column! + 1 : 1}
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-medium text-slate-500 mb-1">
+                                    <label className="block text-xs font-medium text-slate-400 mb-1">
                                         {(data as Component).type === 'html' ? 'Código HTML' : 'Texto'}
                                     </label>
                                     {(data as Component).type === 'html' ? (
                                         <textarea
                                             value={(data as Component).props?.html || ''}
                                             onChange={(e) => updateComponentProps(selectedComponentId, { html: e.target.value })}
-                                            className="w-full text-xs font-mono p-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
+                                            className="w-full text-xs font-mono p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]"
                                             placeholder="<div class='mi-faro'>Hola</div>"
                                         />
                                     ) : (data as Component).type === 'video' ? (
@@ -216,7 +222,7 @@ export const SidebarRight = () => {
                                             type="text"
                                             value={(data as Component).props?.src || ''}
                                             onChange={(e) => updateComponentProps(selectedComponentId, { src: e.target.value })}
-                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                            className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             placeholder="URL de YouTube Embed..."
                                         />
                                     ) : (data as Component).type === 'image' ? (
@@ -226,12 +232,12 @@ export const SidebarRight = () => {
                                                 value={(data as Component).props?.src || ''}
                                                 onChange={(url) => updateComponentProps(selectedComponentId, { src: url })}
                                             />
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Texto Alternativo (Alt)</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Texto Alternativo (Alt)</label>
                                             <input
                                                 type="text"
                                                 value={(data as Component).props?.alt || ''}
                                                 onChange={(e) => updateComponentProps(selectedComponentId, { alt: e.target.value })}
-                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 placeholder="Descripción de la imagen"
                                             />
                                         </div>
@@ -240,7 +246,7 @@ export const SidebarRight = () => {
                                             value={localText}
                                             onChange={handleTextChange}
                                             onBlur={handleTextBlur}
-                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                                            className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
                                             placeholder="Ingresa el contenido..."
                                         />
                                     ) : (data as Component).type === 'button' ? (
@@ -250,14 +256,14 @@ export const SidebarRight = () => {
                                                 value={localText}
                                                 onChange={handleTextChange}
                                                 onBlur={handleTextBlur}
-                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                                 placeholder="Texto del botón..."
                                             />
-                                            <label className="block text-xs font-medium text-slate-500 mb-1 mt-3">Tipo de Acción</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1 mt-3">Tipo de Acción</label>
                                             <select
                                                 value={(data as Component).props?.actionType || 'none'}
                                                 onChange={(e) => updateComponentProps(selectedComponentId, { actionType: e.target.value })}
-                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             >
                                                 <option value="none">Sin Acción</option>
                                                 <option value="link">Abrir Enlace URL</option>
@@ -267,12 +273,12 @@ export const SidebarRight = () => {
 
                                             {(data as Component).props?.actionType !== 'none' && (
                                                 <div className="mt-2">
-                                                    <label className="block text-xs font-medium text-slate-500 mb-1">Destino de la Acción</label>
+                                                    <label className="block text-xs font-medium text-slate-400 mb-1">Destino de la Acción</label>
                                                     <input
                                                         type="text"
                                                         value={(data as Component).props?.actionTarget || ''}
                                                         onChange={(e) => updateComponentProps(selectedComponentId, { actionTarget: e.target.value })}
-                                                        className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         placeholder={(data as Component).props?.actionType === 'link' ? "https://..." : (data as Component).props?.actionType === 'scroll' ? "#seccion-id" : "my-modal-id"}
                                                     />
                                                 </div>
@@ -283,7 +289,7 @@ export const SidebarRight = () => {
                                             <textarea
                                                 value={(data as Component).props?.links || 'Inicio,/\nContacto,/contacto'}
                                                 onChange={(e) => updateComponentProps(selectedComponentId, { links: e.target.value })}
-                                                className="w-full text-xs font-mono p-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                                                className="w-full text-xs font-mono p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
                                                 placeholder="Texto,URL (una por linea)"
                                             />
                                             <p className="text-[10px] text-slate-400">Formato: Nombre,URL (una por línea)</p>
@@ -291,21 +297,21 @@ export const SidebarRight = () => {
                                     ) : (data as Component).type === 'gallery' ? (
                                         <div className="space-y-3">
                                             <div>
-                                                <label className="block text-xs font-medium text-slate-500 mb-1">Columnas</label>
+                                                <label className="block text-xs font-medium text-slate-400 mb-1">Columnas</label>
                                                 <input
                                                     type="number"
                                                     value={(data as Component).props?.columns || 3}
                                                     onChange={(e) => updateComponentProps(selectedComponentId, { columns: parseInt(e.target.value, 10) || 3 })}
-                                                    className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                     min={1} max={6}
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-medium text-slate-500 mb-1">Imágenes (Separadas por comas)</label>
+                                                <label className="block text-xs font-medium text-slate-400 mb-1">Imágenes (Separadas por comas)</label>
                                                 <textarea
                                                     value={(data as Component).props?.images || ''}
                                                     onChange={(e) => updateComponentProps(selectedComponentId, { images: e.target.value })}
-                                                    className="w-full text-xs font-mono p-2 bg-slate-50 border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
+                                                    className="w-full text-xs font-mono p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[100px]"
                                                     placeholder="URL1, URL2, URL3..."
                                                 />
                                             </div>
@@ -313,21 +319,21 @@ export const SidebarRight = () => {
                                     ) : (data as Component).type === 'form' ? (
                                         <div className="space-y-3">
                                             <div>
-                                                <label className="block text-xs font-medium text-slate-500 mb-1">Email de Destino</label>
+                                                <label className="block text-xs font-medium text-slate-400 mb-1">Email de Destino</label>
                                                 <input
                                                     type="email"
                                                     value={(data as Component).props?.emailTo || ''}
                                                     onChange={(e) => updateComponentProps(selectedComponentId, { emailTo: e.target.value })}
-                                                    className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                             </div>
                                             <div>
-                                                <label className="block text-xs font-medium text-slate-500 mb-1">Texto del Botón</label>
+                                                <label className="block text-xs font-medium text-slate-400 mb-1">Texto del Botón</label>
                                                 <input
                                                     type="text"
                                                     value={(data as Component).props?.buttonText || 'Enviar'}
                                                     onChange={(e) => updateComponentProps(selectedComponentId, { buttonText: e.target.value })}
-                                                    className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                             </div>
                                         </div>
@@ -337,7 +343,7 @@ export const SidebarRight = () => {
                                             value={localText}
                                             onChange={handleTextChange}
                                             onBlur={handleTextBlur}
-                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                             placeholder="Ingresa el texto..."
                                         />
                                     )}
@@ -347,16 +353,16 @@ export const SidebarRight = () => {
 
                         {type === 'component' && (
                             <>
-                                <hr className="border-slate-100 my-6" />
+                                <hr className="border-[#1e293b] my-6" />
                                 <div>
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Apariencia</h3>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Alineación de Texto</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Alineación de Texto</label>
                                             <select
                                                 value={(data as Component).styles?.textAlign || 'left'}
                                                 onChange={(e) => updateComponentStyles(selectedComponentId, { textAlign: e.target.value })}
-                                                className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                             >
                                                 <option value="left">Izquierda</option>
                                                 <option value="center">Centro</option>
@@ -365,47 +371,47 @@ export const SidebarRight = () => {
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Tamaño de Fuente (FontSize)</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Tamaño de Fuente (FontSize)</label>
                                             <input
                                                 type="text"
                                                 value={(data as Component).styles?.fontSize || ''}
                                                 onChange={(e) => updateComponentStyles(selectedComponentId, { fontSize: e.target.value })}
-                                                className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                className="w-full text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 placeholder="e.g. 1.5rem o 24px"
                                             />
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Color de Texto</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Color de Texto</label>
                                             <div className="flex items-center gap-2">
                                                 <input
                                                     type="color"
                                                     value={(data as Component).styles?.color || '#334155'}
                                                     onChange={(e) => updateComponentStyles(selectedComponentId, { color: e.target.value })}
-                                                    className="w-8 h-8 rounded border border-slate-200 cursor-pointer p-0 appearance-none bg-transparent"
+                                                    className="w-8 h-8 rounded border border-[#334155] cursor-pointer p-0 appearance-none bg-transparent"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={(data as Component).styles?.color || '#334155'}
                                                     onChange={(e) => updateComponentStyles(selectedComponentId, { color: e.target.value })}
-                                                    className="flex-1 text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="flex-1 text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                             </div>
                                             {renderColorSwatches((c) => updateComponentStyles(selectedComponentId, { color: c }))}
                                         </div>
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Color de Fondo</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Color de Fondo</label>
                                             <div className="flex items-center gap-2">
                                                 <input
                                                     type="color"
                                                     value={(data as Component).styles?.backgroundColor || '#ffffff'}
                                                     onChange={(e) => updateComponentStyles(selectedComponentId, { backgroundColor: e.target.value })}
-                                                    className="w-8 h-8 rounded border border-slate-200 cursor-pointer p-0 appearance-none bg-transparent"
+                                                    className="w-8 h-8 rounded border border-[#334155] cursor-pointer p-0 appearance-none bg-transparent"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={(data as Component).styles?.backgroundColor || 'transparent'}
                                                     onChange={(e) => updateComponentStyles(selectedComponentId, { backgroundColor: e.target.value })}
-                                                    className="flex-1 text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="flex-1 text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                             </div>
                                             {renderColorSwatches((c) => updateComponentStyles(selectedComponentId, { backgroundColor: c }))}
@@ -419,11 +425,11 @@ export const SidebarRight = () => {
                             <>
                                 <div className="space-y-3">
                                     <div>
-                                        <label className="block text-xs font-medium text-slate-500 mb-1">Columnas de Distribución</label>
+                                        <label className="block text-xs font-medium text-slate-400 mb-1">Columnas de Distribución</label>
                                         <select
                                             value={(data as Section).columns || 1}
                                             onChange={(e) => updateSectionProps(selectedComponentId, { columns: parseInt(e.target.value, 10) })}
-                                            className="w-full text-sm p-2 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            className="w-full text-sm p-2 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                         >
                                             <option value={1}>1 Columna (Ancho Completo)</option>
                                             <option value={2}>2 Columnas (Mitad y Mitad)</option>
@@ -436,25 +442,25 @@ export const SidebarRight = () => {
                                     </div>
                                 </div>
 
-                                <hr className="border-slate-100 my-6" />
+                                <hr className="border-[#1e293b] my-6" />
 
                                 <div>
                                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Apariencia de Sección</h3>
                                     <div className="space-y-4">
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-1">Color de Fondo</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-1">Color de Fondo</label>
                                             <div className="flex items-center gap-2">
                                                 <input
                                                     type="color"
                                                     value={(data as Section).styles?.backgroundColor || '#ffffff'}
                                                     onChange={(e) => updateSectionStyles(selectedComponentId, { backgroundColor: e.target.value })}
-                                                    className="w-8 h-8 rounded border border-slate-200 cursor-pointer p-0 appearance-none bg-transparent"
+                                                    className="w-8 h-8 rounded border border-[#334155] cursor-pointer p-0 appearance-none bg-transparent"
                                                 />
                                                 <input
                                                     type="text"
                                                     value={(data as Section).styles?.backgroundColor || 'transparent'}
                                                     onChange={(e) => updateSectionStyles(selectedComponentId, { backgroundColor: e.target.value })}
-                                                    className="flex-1 text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="flex-1 text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                 />
                                             </div>
                                             {renderColorSwatches((c) => updateSectionStyles(selectedComponentId, { backgroundColor: c }))}
@@ -470,7 +476,7 @@ export const SidebarRight = () => {
 
                                         {/* PADDINGS */}
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-2">Espaciado Interior (Padding)</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-2">Espaciado Interior (Padding)</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div>
                                                     <label className="text-[10px] text-slate-400">Arriba</label>
@@ -478,7 +484,7 @@ export const SidebarRight = () => {
                                                         type="text"
                                                         value={(data as Section).styles?.padding?.top || ''}
                                                         onChange={(e) => updateSectionStyles(selectedComponentId, { padding: { ...(data as Section).styles?.padding, top: e.target.value } })}
-                                                        className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         placeholder="e.g. 2rem"
                                                     />
                                                 </div>
@@ -488,7 +494,7 @@ export const SidebarRight = () => {
                                                         type="text"
                                                         value={(data as Section).styles?.padding?.bottom || ''}
                                                         onChange={(e) => updateSectionStyles(selectedComponentId, { padding: { ...(data as Section).styles?.padding, bottom: e.target.value } })}
-                                                        className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         placeholder="e.g. 2rem"
                                                     />
                                                 </div>
@@ -497,7 +503,7 @@ export const SidebarRight = () => {
 
                                         {/* MARGINS */}
                                         <div>
-                                            <label className="block text-xs font-medium text-slate-500 mb-2">Margen Exterior (Margin)</label>
+                                            <label className="block text-xs font-medium text-slate-400 mb-2">Margen Exterior (Margin)</label>
                                             <div className="grid grid-cols-2 gap-2">
                                                 <div>
                                                     <label className="text-[10px] text-slate-400">Arriba</label>
@@ -505,7 +511,7 @@ export const SidebarRight = () => {
                                                         type="text"
                                                         value={(data as Section).styles?.margin?.top || ''}
                                                         onChange={(e) => updateSectionStyles(selectedComponentId, { margin: { ...(data as Section).styles?.margin, top: e.target.value } })}
-                                                        className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         placeholder="e.g. 2rem"
                                                     />
                                                 </div>
@@ -515,7 +521,7 @@ export const SidebarRight = () => {
                                                         type="text"
                                                         value={(data as Section).styles?.margin?.bottom || ''}
                                                         onChange={(e) => updateSectionStyles(selectedComponentId, { margin: { ...(data as Section).styles?.margin, bottom: e.target.value } })}
-                                                        className="w-full text-sm p-1.5 bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-full text-sm p-1.5 bg-[#1e293b] border-[#334155] text-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                                         placeholder="e.g. 2rem"
                                                     />
                                                 </div>

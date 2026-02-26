@@ -9,11 +9,20 @@ import {
     MoreVertical, PlusCircle, LogOut
 } from "lucide-react";
 
+interface PortalSummary {
+    id: string;
+    name: string;
+    description?: string;
+    status?: string;
+    updatedAt?: string;
+    published?: boolean;
+}
+
 export default function DashboardPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
 
-    const [myPortals, setMyPortals] = useState<any[]>([]);
+    const [myPortals, setMyPortals] = useState<PortalSummary[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {

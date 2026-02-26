@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 
 import React from 'react';
@@ -14,7 +15,7 @@ interface DroppableColumnProps {
 
 const renderComponentPreview = (comp: PortalComponent) => {
     const styleObj = {
-        textAlign: comp.styles?.textAlign as any,
+        textAlign: comp.styles?.textAlign as React.CSSProperties['textAlign'],
         color: comp.styles?.color,
         fontSize: comp.styles?.fontSize,
     };
@@ -26,7 +27,7 @@ const renderComponentPreview = (comp: PortalComponent) => {
             return <p className="text-base leading-relaxed" style={styleObj}>{comp.props.text || 'Sin texto'}</p>;
         case 'button':
             return (
-                <div style={{ textAlign: comp.styles?.textAlign as any || 'left' }} className="w-full">
+                <div style={{ textAlign: (comp.styles?.textAlign as React.CSSProperties['textAlign']) || 'left' }} className="w-full">
                     <button className="px-6 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow-sm pointer-events-none relative" style={{ fontSize: comp.styles?.fontSize, backgroundColor: comp.styles?.backgroundColor || '#2563eb', color: comp.styles?.color || '#ffffff' }}>
                         {comp.props.text || 'Botón'}
                         {comp.props.actionType && comp.props.actionType !== 'none' && (
@@ -42,7 +43,7 @@ const renderComponentPreview = (comp: PortalComponent) => {
             return (
                 <nav className="flex flex-wrap gap-4 items-center justify-between w-full" style={styleObj}>
                     <div className="flex gap-4">
-                        {links.map(([text, url]: string[], idx: number) => (
+                        {links.map(([text]: string[], idx: number) => (
                             <a key={idx} href="#" onClick={e => e.preventDefault()} className="hover:underline font-medium">
                                 {text || 'Link'}
                             </a>
@@ -113,11 +114,11 @@ const DroppableColumn = ({ sectionId, columnIndex, components }: DroppableColumn
     return (
         <div
             ref={setNodeRef}
-            className={`min-h-[100px] p-2 rounded transition-all flex flex-col gap-2 ${isOver ? 'bg-blue-50 ring-2 ring-blue-200' : 'bg-transparent border border-transparent hover:border-slate-200 border-dashed'
+            className={`min-h-[100px] p-2 rounded-lg transition-all flex flex-col gap-2 ${isOver ? 'bg-blue-900/20 ring-2 ring-blue-500/50' : 'bg-transparent border border-transparent hover:border-[#334155] border-dashed'
                 }`}
         >
             {components.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-slate-400 text-xs italic text-center rounded bg-slate-50 border border-slate-200 border-dashed">
+                <div className="flex-1 flex items-center justify-center text-slate-500 text-xs italic text-center rounded bg-[#0b1120] border border-[#1e293b] border-dashed">
                     Soltar elementos aquí
                 </div>
             ) : (
@@ -125,12 +126,12 @@ const DroppableColumn = ({ sectionId, columnIndex, components }: DroppableColumn
                     <div
                         key={comp.id}
                         style={{ backgroundColor: comp.styles?.backgroundColor || '#ffffff' }}
-                        className={`relative group rounded-md cursor-pointer transition-all ${selectedComponentId === comp.id ? 'ring-2 ring-blue-500 shadow-md' : 'ring-1 ring-slate-200 hover:ring-blue-300 hover:shadow-sm'
+                        className={`relative group rounded-md cursor-pointer transition-all ${selectedComponentId === comp.id ? 'ring-2 ring-blue-500 shadow-xl shadow-blue-900/10' : 'ring-1 ring-[#1e293b] hover:ring-blue-500/50 hover:shadow-lg'
                             }`}
                         onClick={(e) => { e.stopPropagation(); selectComponent(comp.id); }}
                     >
                         {/* Indicador de Tipo (Visible al pasar el mouse o seleccionado) */}
-                        <div className={`absolute -top-2.5 left-3 bg-white px-2 rounded-full border text-[9px] uppercase font-bold tracking-wider z-10 transition-opacity ${selectedComponentId === comp.id ? 'opacity-100 border-blue-500 text-blue-600' : 'opacity-0 group-hover:opacity-100 border-slate-300 text-slate-500'}`}>
+                        <div className={`absolute -top-2.5 left-3 bg-[#0b1120] px-2 rounded-full border text-[9px] uppercase font-bold tracking-wider z-10 transition-opacity ${selectedComponentId === comp.id ? 'opacity-100 border-blue-500 text-blue-400' : 'opacity-0 group-hover:opacity-100 border-[#334155] text-slate-400'}`}>
                             {comp.type}
                         </div>
 
@@ -199,7 +200,7 @@ export const DroppableSection = ({ section }: DroppableSectionProps) => {
         <div
             ref={setNodeRef}
             style={style}
-            className={`border border-slate-300 bg-white p-4 rounded-md relative shadow-sm transition-all hover:border-slate-400 ${selectedComponentId === section.id ? 'ring-2 ring-blue-500 border-transparent' : ''
+            className={`border border-[#1e293b] bg-[#020617] p-4 rounded-xl relative shadow-md transition-all hover:border-[#334155] ${selectedComponentId === section.id ? 'ring-2 ring-blue-500 border-transparent' : ''
                 }`}
             onClick={(e) => { e.stopPropagation(); selectComponent(section.id); }}
         >
@@ -207,7 +208,7 @@ export const DroppableSection = ({ section }: DroppableSectionProps) => {
             <div
                 {...attributes}
                 {...listeners}
-                className="absolute -top-3 left-4 bg-white px-2 py-0.5 border border-slate-200 text-[10px] uppercase tracking-wider text-slate-400 rounded cursor-grab active:cursor-grabbing hover:bg-slate-50 hover:text-blue-500 transition-colors flex items-center gap-1"
+                className="absolute -top-3 left-4 bg-[#0b1120] px-2 py-0.5 border border-[#1e293b] text-[10px] uppercase tracking-wider text-slate-400 rounded-md cursor-grab active:cursor-grabbing hover:bg-[#1e293b] hover:text-blue-400 transition-colors flex items-center gap-1 shadow-sm"
                 onClick={(e) => e.stopPropagation()}
             >
                 <svg width="10" height="10" viewBox="0 0 20 20" fill="currentColor" className="text-slate-400">

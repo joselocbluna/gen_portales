@@ -20,7 +20,7 @@ export const Canvas = () => {
     return (
         <div
             ref={setNodeRef}
-            className={`min-h-[800px] w-full max-w-5xl shadow-md rounded border p-4 transition-all ${isOver ? 'border-blue-500 ring-4 ring-blue-50' : 'border-slate-200'}`}
+            className={`min-h-[800px] w-full max-w-5xl shadow-2xl rounded-lg border p-4 transition-all ${isOver ? 'border-blue-500 ring-4 ring-blue-900/20' : 'border-[#1e293b] shadow-black/50'} relative mx-auto`}
             style={{
                 backgroundColor: portal?.globalStyles?.bodyBackground || '#ffffff',
                 color: portal?.settings?.colorPalette?.text || 'inherit'
@@ -28,7 +28,7 @@ export const Canvas = () => {
             onClick={() => selectComponent(null)}
         >
             {!portal ? (
-                <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 py-32 border-2 border-dashed border-slate-300 rounded-lg pointer-events-none">
+                <div className="h-full w-full flex flex-col items-center justify-center text-slate-500 py-32 border-2 border-dashed border-[#334155] rounded-xl pointer-events-none bg-[#0f172a]/20">
                     <p className="text-lg font-medium mb-2">El lienzo está vacío</p>
                     <p className="text-sm">Arrastra componentes desde el panel izquierdo para comenzar a diseñar.</p>
                 </div>
@@ -43,7 +43,7 @@ export const Canvas = () => {
                         ))}
 
                         {activePageSections.length === 0 && (
-                            <div className="h-full w-full flex flex-col items-center justify-center text-slate-400 py-32 border-2 border-dashed border-slate-300 rounded-lg pointer-events-none">
+                            <div className="h-full w-full flex flex-col items-center justify-center text-slate-500 py-32 border-2 border-dashed border-[#334155] rounded-xl pointer-events-none bg-[#0f172a]/20">
                                 <p className="text-lg font-medium mb-2">Suelta Estructuras aquí</p>
                                 <p className="text-sm">Arrastra una Sección o Columnas desde el panel izquierdo.</p>
                             </div>

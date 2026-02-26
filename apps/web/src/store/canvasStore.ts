@@ -17,8 +17,8 @@ interface CanvasStoreState {
     addComponentFromDrag: (sectionId: string, componentType: string, columnIndex?: number) => void;
 
     // Modifiers
-    updateComponentProps: (componentId: string, props: Record<string, any>) => void;
-    updateComponentStyles: (componentId: string, styles: Record<string, any>) => void;
+    updateComponentProps: (componentId: string, props: Record<string, unknown>) => void;
+    updateComponentStyles: (componentId: string, styles: Record<string, unknown>) => void;
     updateSectionProps: (sectionId: string, props: Partial<Section>) => void;
     updateSectionStyles: (sectionId: string, styles: Partial<Section["styles"]>) => void;
     addSection: (pageId: string, section: Section) => void;
@@ -84,7 +84,7 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
         page.sections.push({
             id: `section-${Date.now()}`,
             name: sectionType === 'columns' ? "Columnas" : sectionType === 'footer' ? "Pie de Página" : "Nueva Sección",
-            type: sectionType as any,
+            type: sectionType as "columns" | "section" | "header" | "footer",
             columns: sectionType === 'columns' ? 2 : sectionType === 'footer' ? 3 : 1,
             components: [],
             styles: sectionType === 'footer' ? { padding: { top: '3rem', bottom: '3rem' }, margin: {}, backgroundColor: '#1e293b' } : { padding: {}, margin: {} },
@@ -100,7 +100,7 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
         const section = page.sections.find(s => s.id === sectionId);
         if (!section) return;
 
-        let initialProps = { text: "Haz clic para editar" } as Record<string, any>;
+        let initialProps: Record<string, unknown> = { text: "Haz clic para editar" };
         if (componentType === 'video') initialProps = { src: 'https://www.youtube.com/embed/dQw4w9WgXcQ' };
         if (componentType === 'html') initialProps = { html: '<div class="p-4 bg-gray-100 rounded text-center">Custom HTML</div>' };
         if (componentType === 'navigation') initialProps = { links: 'Inicio,/\nNosotros,/nosotros\nContacto,/contacto' };
@@ -110,7 +110,7 @@ export const useCanvasStore = create<CanvasStoreState>((set) => ({
 
         const newComponent: Component = {
             id: `comp-${Date.now()}`,
-            type: componentType as any,
+            type: componentType as "heading" | "paragraph" | "button" | "image" | "html" | "video" | "navigation" | "gallery" | "form",
             name: `Elemento ${componentType}`,
             props: initialProps,
             styles: {},

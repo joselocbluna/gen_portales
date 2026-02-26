@@ -7,6 +7,8 @@ import { Canvas } from './Canvas';
 import { DndContext, DragOverlay, DragStartEvent, DragEndEvent } from '@dnd-kit/core';
 import { SidebarItemOverlay } from './SidebarLeft';
 import { useCanvasStore } from '../../store/canvasStore';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export const EditorLayout = ({ portalId }: { portalId: string }) => {
     const [activeId, setActiveId] = React.useState<string | null>(null);
@@ -147,36 +149,48 @@ export const EditorLayout = ({ portalId }: { portalId: string }) => {
 
     return (
         <DndContext id={dndId} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-            <div className="flex h-screen w-screen overflow-hidden bg-slate-100">
+            <div className="flex h-screen w-screen overflow-hidden bg-[#030712] text-slate-300">
                 {/* Columna Izquierda: Elementos / Catálogo */}
                 <SidebarLeft />
 
                 {/* Columna Central: El Canvas Interactivo interactuando con dnd-kit */}
-                <main className="flex-1 flex flex-col relative">
-                    <header className="h-14 bg-white border-b border-slate-200 flex items-center px-4 justify-between">
-                        <div className="font-semibold text-slate-700">Editor de Portales</div>
-                        <div className="flex gap-2">
+                <main className="flex-1 flex flex-col relative w-full h-full">
+                    <header className="h-14 bg-[#0b1120] border-b border-[#1e293b] flex items-center px-6 justify-between shrink-0">
+                        <div className="flex items-center gap-4">
+                            <Link
+                                href="/dashboard"
+                                className="text-slate-400 hover:text-white transition-colors bg-[#1e293b] hover:bg-[#334155] p-1.5 rounded-md"
+                                title="Volver al Dashboard"
+                            >
+                                <ArrowLeft size={16} />
+                            </Link>
+                            <div className="font-semibold text-sm text-white flex items-center gap-2">
+                                <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                                Editor de Portales
+                            </div>
+                        </div>
+                        <div className="flex gap-3">
                             <button
                                 onClick={handleSave}
                                 disabled={isSaving || isLoadingUrl}
-                                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${isSaving ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700 font-medium shadow-sm text-white'}`}
+                                className={`px-4 py-1.5 text-xs rounded-md transition-colors border ${isSaving ? 'bg-blue-900/50 border-blue-900/50 text-blue-400 cursor-not-allowed' : 'bg-blue-600 border-blue-600 hover:bg-blue-700 hover:border-blue-700 font-medium shadow-sm shadow-blue-900/20 text-white'}`}
                             >
                                 {isSaving ? 'Guardando...' : 'Guardar'}
                             </button>
-                            <button className="px-3 py-1.5 text-sm bg-slate-100 hover:bg-slate-200 rounded-md text-slate-700 transition-colors">
+                            <button className="px-4 py-1.5 text-xs bg-[#1e293b] hover:bg-[#334155] border border-[#334155] rounded-md text-slate-300 hover:text-white transition-colors">
                                 Previsualizar
                             </button>
                             <button
                                 onClick={handleGenerateAstro}
                                 disabled={isGenerating || isLoadingUrl}
-                                className={`px-3 py-1.5 text-sm rounded-md text-white transition-colors ${isGenerating ? 'bg-slate-400 cursor-not-allowed' : 'bg-emerald-600 hover:bg-emerald-700 font-medium shadow-sm'}`}
+                                className={`px-4 py-1.5 text-xs rounded-md text-white transition-colors border ${isGenerating ? 'bg-emerald-900/50 border-emerald-900/50 text-emerald-400 cursor-not-allowed' : 'bg-emerald-600 border-emerald-600 hover:bg-emerald-700 hover:border-emerald-700 font-medium shadow-sm shadow-emerald-900/20'}`}
                             >
                                 {isGenerating ? 'Generando Astro...' : 'Exportar a Astro'}
                             </button>
                         </div>
                     </header>
 
-                    <div className="flex-1 overflow-auto p-8 relative flex justify-center w-full">
+                    <div className="flex-1 overflow-auto p-8 relative flex justify-center w-full custom-scrollbar">
                         <Canvas />
                     </div>
                 </main>
