@@ -112,6 +112,7 @@ model Project {
   companyId   String        @map("company_id")
   templateId  String?       @map("template_id") // Template base usado
   settings    Json?         // Configuraciones del portal como JSONB
+  globalStyles Json?        @map("global_styles") // Estilos globales del portal
   createdAt   DateTime      @default(now()) @map("created_at")
   updatedAt   DateTime      @updatedAt @map("updated_at")
   publishedAt DateTime?     @map("published_at")

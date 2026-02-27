@@ -69,14 +69,14 @@ let GeneradorService = GeneradorService_1 = class GeneradorService {
                         id: page.id,
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Nueva Página',
-                        slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                        slug: page.slug === 'home' || page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                         content: page.sections,
                         projectId: portalData.id
                     },
                     update: {
                         name: page.title || 'Página Sin Nombre',
                         title: page.title || 'Página Actualizada',
-                        slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                        slug: page.slug === 'home' || page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                         content: page.sections,
                     }
                 });
@@ -196,7 +196,7 @@ ${sidebarHtml}
 ---
 ${htmlContent}
 `;
-        const pagePath = page.path === '/' ? 'index' : (page.path || '').replace(/^\/+/, '');
+        const pagePath = page.slug === '/' ? 'index' : (page.slug || '').replace(/^\/+/, '');
         const fileName = pagePath || 'index';
         await fs.writeFile(path.join(baseDir, 'src', 'pages', `${fileName}.astro`), fileContent);
     }

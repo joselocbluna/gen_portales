@@ -27,7 +27,7 @@ export class ProyectosService {
             id: page.id,
             name: page.name,
             title: page.title,
-            path: page.slug === 'home' ? '/' : `/${page.slug}`,
+            slug: page.slug === 'home' ? '/' : `/${page.slug}`,
             description: page.description,
             layout: page.layout,
             sections: page.content || [],
@@ -44,7 +44,7 @@ export class ProyectosService {
                 id: `page-${Date.now()}`,
                 name: "Inicio",
                 title: "Página de Inicio",
-                path: "/",
+                slug: "/",
                 description: "Página principal",
                 layout: "default",
                 sections: [],
@@ -57,6 +57,7 @@ export class ProyectosService {
             name: project.name,
             slug: project.slug,
             settings: project.settings || { language: "es" },
+            globalStyles: project.globalStyles || { bodyBackground: "#ffffff", defaultFont: "Inter", headingFont: "Inter", linkColor: "#2563eb" },
             pages
         };
     }
@@ -69,6 +70,7 @@ export class ProyectosService {
                 name: portalState.name,
                 slug: portalState.slug,
                 settings: portalState.settings,
+                globalStyles: portalState.globalStyles,
             }
         });
 
@@ -80,7 +82,7 @@ export class ProyectosService {
                     id: page.id,
                     name: page.title || 'Página Sin Nombre',
                     title: page.title || 'Nueva Página',
-                    slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                    slug: page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                     content: page.sections as any,
                     projectId: id,
                     isHomepage: page.meta?.isHomepage || false,
@@ -91,7 +93,7 @@ export class ProyectosService {
                 update: {
                     name: page.title || 'Página Sin Nombre',
                     title: page.title || 'Página Actualizada',
-                    slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                    slug: page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                     content: page.sections as any,
                     isHomepage: page.meta?.isHomepage || false,
                     isPublished: page.meta?.isPublished || true,

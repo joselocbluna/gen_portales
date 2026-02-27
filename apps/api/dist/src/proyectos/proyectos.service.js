@@ -36,7 +36,7 @@ let ProyectosService = class ProyectosService {
             id: page.id,
             name: page.name,
             title: page.title,
-            path: page.slug === 'home' ? '/' : `/${page.slug}`,
+            slug: page.slug === 'home' ? '/' : `/${page.slug}`,
             description: page.description,
             layout: page.layout,
             sections: page.content || [],
@@ -52,7 +52,7 @@ let ProyectosService = class ProyectosService {
                     id: `page-${Date.now()}`,
                     name: "Inicio",
                     title: "Página de Inicio",
-                    path: "/",
+                    slug: "/",
                     description: "Página principal",
                     layout: "default",
                     sections: [],
@@ -64,6 +64,7 @@ let ProyectosService = class ProyectosService {
             name: project.name,
             slug: project.slug,
             settings: project.settings || { language: "es" },
+            globalStyles: project.globalStyles || { bodyBackground: "#ffffff", defaultFont: "Inter", headingFont: "Inter", linkColor: "#2563eb" },
             pages
         };
     }
@@ -74,6 +75,7 @@ let ProyectosService = class ProyectosService {
                 name: portalState.name,
                 slug: portalState.slug,
                 settings: portalState.settings,
+                globalStyles: portalState.globalStyles,
             }
         });
         for (const page of portalState.pages) {
@@ -83,7 +85,7 @@ let ProyectosService = class ProyectosService {
                     id: page.id,
                     name: page.title || 'Página Sin Nombre',
                     title: page.title || 'Nueva Página',
-                    slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                    slug: page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                     content: page.sections,
                     projectId: id,
                     isHomepage: page.meta?.isHomepage || false,
@@ -94,7 +96,7 @@ let ProyectosService = class ProyectosService {
                 update: {
                     name: page.title || 'Página Sin Nombre',
                     title: page.title || 'Página Actualizada',
-                    slug: page.path === '/' ? 'home' : (page.path || '').replace(/^\/+/, ''),
+                    slug: page.slug === '/' ? 'home' : (page.slug || '').replace(/^\/+/, ''),
                     content: page.sections,
                     isHomepage: page.meta?.isHomepage || false,
                     isPublished: page.meta?.isPublished || true,
